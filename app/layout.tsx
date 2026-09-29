@@ -32,6 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <link rel="stylesheet" href="/styles.css" />
         <link rel="stylesheet" href="/next-overrides.css" />
         <link rel="stylesheet" href="/visual-refinement.css" />
+        <link rel="stylesheet" href="/crm.css" />
       </head>
       <body>{children}</body>
     </html>

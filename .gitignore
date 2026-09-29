@@ -4,6 +4,7 @@
 /out/
 /build/
 /dist/
+/app/generated/prisma/
 *.tsbuildinfo
 
 # Local secrets and environment overrides

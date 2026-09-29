@@ -73,26 +73,77 @@ export function InvestmentCalculator() {
 
 export function EnquiryForm() {
   const [status, setStatus] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submittedName, setSubmittedName] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setStatus("");
+    const form = event.currentTarget;
     const data = new FormData(event.currentTarget);
-    const name = `${data.get("firstName")} ${data.get("lastName")}`.trim();
-    const subject = encodeURIComponent(`Mutirikwi REIT enquiry from ${name}`);
-    const body = encodeURIComponent([
-      "Please contact me about the Mutirikwi REIT Masvingo Flats Project.",
-      "",
-      `Name: ${name}`,
-      `Email: ${data.get("email")}`,
-      `Phone / WhatsApp: ${data.get("phone") || "Not provided"}`,
-      `Country: ${data.get("country") || "Not provided"}`,
-      `Investor type: ${data.get("investorType") || "Not provided"}`,
-      `Intended investment range: ${data.get("investment") || "Not provided"}`,
-      `Investment timeline: ${data.get("timeline") || "Not provided"}`,
-      `Preferred contact method: ${data.get("preferredContact") || "Not provided"}`,
-    ].join("\n"));
-    setStatus("Your email app will open with your enquiry addressed to the Fund Manager. Send the email there to complete your request.");
-    window.location.href = `mailto:info@redwood.co.zw?subject=${subject}&body=${body}`;
+    const firstName = String(data.get("firstName") || "").trim();
+    const lastName = String(data.get("lastName") || "").trim();
+    const tracking = new URLSearchParams(window.location.search);
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email: data.get("email"),
+          phone: data.get("phone"),
+          whatsapp: data.get("whatsapp"),
+          country: data.get("country"),
+          investorType: data.get("investorType"),
+          investmentRange: data.get("investment"),
+          timeline: data.get("timeline"),
+          preferredContact: data.get("preferredContact"),
+          consent: data.get("consent") === "on",
+          website: data.get("website"),
+          attribution: {
+            utmSource: tracking.get("utm_source"),
+            utmMedium: tracking.get("utm_medium"),
+            utmCampaign: tracking.get("utm_campaign"),
+            utmContent: tracking.get("utm_content"),
+            utmTerm: tracking.get("utm_term"),
+            landingPage: `${window.location.pathname}${window.location.search}`,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        setStatus(response.status === 429
+          ? "We have received several requests from this connection. Please try again in a little while."
+          : "We could not submit your enquiry just now. Please check the details and try again.");
+        return;
+      }
+
+      setSubmittedName(firstName || "Investor");
+      form.reset();
+    } catch {
+      setStatus("We could not connect securely. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (submittedName) {
+    return (
+      <div className="enquiry-form enquiry-confirmation" role="status" aria-live="polite">
+        <span>ENQUIRY RECEIVED</span>
+        <h3>Thank you, {submittedName}.</h3>
+        <p>Your investment enquiry has been received. A member of the Mutirikwi REIT team will contact you regarding the next steps.</p>
+        <p className="form-note">Submitting an enquiry does not create an investment or reserve units.</p>
+        <div className="confirmation-actions">
+          <a className="button button-red" href="/assets/Masvingo_Flats_Project_Brochure_Abridged.pdf" download>Download brochure <span>↓</span></a>
+          <a className="text-link" href="#development">Explore the development <span>↗</span></a>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -102,17 +153,19 @@ export function EnquiryForm() {
         <label>First name<input name="firstName" autoComplete="given-name" required /></label>
         <label>Last name<input name="lastName" autoComplete="family-name" required /></label>
         <label>Email address<input type="email" name="email" autoComplete="email" required /></label>
-        <label>Phone / WhatsApp<input type="tel" name="phone" autoComplete="tel" /></label>
-        <label>Country<input name="country" autoComplete="country-name" /></label>
-        <label>Investor type<select name="investorType" defaultValue=""><option value="">Select type</option><option>Individual</option><option>Diaspora</option><option>Corporate</option><option>Pension fund</option><option>Insurance</option><option>Bank</option><option>Other</option></select></label>
-        <label>Approximate intended investment<select name="investment" defaultValue=""><option value="">Select range</option><option>US$100–999</option><option>US$1,000–4,999</option><option>US$5,000–9,999</option><option>US$10,000–49,999</option><option>US$50,000–99,999</option><option>US$100,000+</option><option>Still exploring</option></select></label>
-        <label>Investment timeline<select name="timeline" defaultValue=""><option value="">Select timeline</option><option>Immediately</option><option>Within 30 days</option><option>1–3 months</option><option>3–6 months</option><option>Researching</option></select></label>
-        <label className="full">Preferred contact method<select name="preferredContact" defaultValue=""><option value="">Select preference</option><option>Email</option><option>Phone</option><option>WhatsApp</option></select></label>
+        <label>Phone number<input type="tel" name="phone" autoComplete="tel" /></label>
+        <label>WhatsApp number<input type="tel" name="whatsapp" autoComplete="tel" /></label>
+        <label>Country<input name="country" autoComplete="country-name" required /></label>
+        <label>Investor type<select name="investorType" defaultValue="" required><option value="">Select type</option><option value="INDIVIDUAL">Individual</option><option value="DIASPORA">Diaspora</option><option value="CORPORATE">Corporate</option><option value="PENSION_FUND">Pension fund</option><option value="INSURANCE">Insurance</option><option value="BANK">Bank</option><option value="EMPLOYER">Employer</option><option value="OTHER">Other</option></select></label>
+        <label>Approximate intended investment<select name="investment" defaultValue="" required><option value="">Select range</option><option value="RANGE_100_999">US$100–999</option><option value="RANGE_1000_4999">US$1,000–4,999</option><option value="RANGE_5000_9999">US$5,000–9,999</option><option value="RANGE_10000_49999">US$10,000–49,999</option><option value="RANGE_50000_99999">US$50,000–99,999</option><option value="RANGE_100000_PLUS">US$100,000+</option></select></label>
+        <label>Investment timeline<select name="timeline" defaultValue="" required><option value="">Select timeline</option><option value="IMMEDIATELY">Immediately</option><option value="WITHIN_30_DAYS">Within 30 days</option><option value="ONE_TO_THREE_MONTHS">1–3 months</option><option value="THREE_TO_SIX_MONTHS">3–6 months</option><option value="RESEARCHING">Researching</option></select></label>
+        <label className="full">Preferred contact method<select name="preferredContact" defaultValue="" required><option value="">Select preference</option><option value="EMAIL">Email</option><option value="PHONE">Phone</option><option value="WHATSAPP">WhatsApp</option></select></label>
+        <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex={-1} autoComplete="off" /></label>
         <label className="consent full"><input type="checkbox" name="consent" required /><span>I agree to be contacted about this enquiry. See the <a href="#disclaimer">information notice</a>.</span></label>
       </div>
-      <button className="button button-red submit-button" type="submit">Request the investment pack <span>↗</span></button>
+      <button className="button button-red submit-button" type="submit" disabled={submitting}>{submitting ? "Sending securely…" : "Request the investment pack"} <span>↗</span></button>
       <p className="form-note">Submitting an enquiry does not create an investment or reserve units.</p>
-      <div className="form-status" role="status" aria-live="polite">{status}</div>
+      <div className="form-status" data-state={status ? "error" : "idle"} role="status" aria-live="polite">{status}</div>
     </form>
   );
 }
@@ -128,7 +181,7 @@ export function SiteFooter() {
         <Link className="footer-up" href="#home">Back to top ↑</Link>
       </div>
       <div className="wrap footer-bottom">
-        <p>For discussion purposes only. This website does not constitute an offer or investment advice. Yield and IRR are targets, not guarantees. Project unit counts, areas and timelines remain subject to tender award and statutory approvals. Renders are artist&apos;s impressions. Please consult the official offer documents and seek independent advice. Enquiry details are placed in a draft email on your device; this website does not store them.</p>
+        <p>For discussion purposes only. This website does not constitute an offer or investment advice. Yield and IRR are targets, not guarantees. Project unit counts, areas and timelines remain subject to tender award and statutory approvals. Renders are artist&apos;s impressions. Please consult the official offer documents and seek independent advice. Enquiry details are stored securely so the REIT team can respond to your request.</p>
         <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><a href="/assets/Masvingo_Flats_Project_Brochure_Abridged.pdf" download>Download brochure ↓</a></div>
       </div>
     </footer>
