@@ -1,0 +1,1078 @@
+:root {
+  --sans: var(--font-overused-grotesk), Arial, sans-serif;
+  --display: var(--font-overused-grotesk), Arial, sans-serif;
+  --navy: #344955;
+  --navy2: #465d65;
+  --ink: #26383f;
+  --muted: #596a6d;
+  --red: #bd4a40;
+  --red-dark: #9f3933;
+  --button-red: #ec1d23;
+  --button-red-hover: #c9161d;
+  --cream: #fff;
+}
+
+.button-red,
+.nav-cta {
+  background-color: var(--button-red);
+}
+
+.button-red:hover,
+.nav-cta:hover {
+  background-color: var(--button-red-hover);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--button-red);
+  outline-offset: 3px;
+}
+
+body {
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.topline {
+  background: #34464c;
+  font-size: 11px;
+}
+
+.primary-nav {
+  font-size: 13px;
+}
+
+.eyebrow {
+  font-size: 11px;
+}
+
+.hero {
+  background: #2d4147;
+}
+
+.hero-shade {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, .86) 0%, rgba(0, 0, 0, .78) 25%, rgba(0, 0, 0, .56) 48%, rgba(0, 0, 0, .3) 75%, rgba(0, 0, 0, .24) 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, .42), transparent 48%);
+}
+
+.hero h1 {
+  font-size: clamp(48px, 5.2vw, 72px);
+}
+
+.hero-lede {
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.button {
+  font-size: 12px;
+}
+
+.hero-caption {
+  font-size: 11px;
+}
+
+.hero-note {
+  font-size: 13px;
+}
+
+/* Give the brand mark a consistent safe area so the full artwork never feels cropped. */
+.site-header .brand-logo {
+  flex: 0 0 170px;
+  width: 170px;
+  height: 88px;
+  padding: 7px 9px;
+  overflow: visible;
+}
+
+.site-header .logo-crop {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.site-header .logo-crop img {
+  object-fit: contain !important;
+  object-position: center;
+}
+
+/* Tighten the hero's type rhythm and make its project note feel intentional. */
+.hero h1 {
+  max-width: 660px;
+  line-height: 1.04;
+  letter-spacing: -.045em;
+}
+
+.hero-lede {
+  max-width: 450px;
+  margin-top: 22px;
+  margin-bottom: 30px;
+}
+
+.hero-actions {
+  gap: 14px;
+}
+
+.hero-note {
+  border-left: 2px solid var(--button-red);
+  padding: 16px 20px 16px 32px;
+  background: rgba(30, 48, 53, .55);
+}
+
+.stat-ribbon {
+  background: #fff;
+}
+
+.model,
+.governance,
+.terms,
+.enquiry-form {
+  background-color: #fff;
+}
+
+.stat-item strong {
+  color: var(--navy);
+  font-size: 31px;
+}
+
+.stat-item strong,
+.market-stat strong,
+.fact-main > strong,
+.fact-grid strong,
+.calc-results strong {
+  font-family: var(--sans);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.035em;
+}
+
+/* Keep headline emphasis monochrome; use white on dark surfaces. */
+.hero h1 em,
+.development h2 em {
+  color: #fff;
+}
+
+.section h2 em,
+.terms h2 em,
+.enquiry h2 em {
+  color: inherit;
+}
+
+.stat-item small {
+  font-size: 10px;
+}
+
+.section-intro p,
+.model-heading > p,
+.governance-header > div:nth-child(2) > p {
+  font-size: 15px;
+}
+
+.text-link {
+  font-size: 12px;
+}
+
+.micro-label,
+.market-stat .micro-label {
+  font-size: 11px;
+}
+
+.market-stat p {
+  font-size: 13px;
+}
+
+.market-aside p {
+  font-size: 14px;
+}
+
+.audience-tags span {
+  font-size: 12px;
+}
+
+.development {
+  background: #3a5052;
+}
+
+.development-copy {
+  max-width: 400px;
+  padding-left: 20px;
+  border-left: 2px solid var(--button-red);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+.project-feature {
+  background: #465d60;
+}
+
+.image-tag {
+  background: rgba(39, 55, 57, .88);
+  font-size: 10px;
+}
+
+.visual-label span,
+.fact-main > span {
+  font-size: 10px;
+}
+
+.fact-main p {
+  font-size: 13px;
+}
+
+.fact-grid span {
+  font-size: 11px;
+}
+
+.amenities {
+  margin-top: 42px;
+}
+
+.amenity {
+  gap: 7px;
+  padding: 18px 22px;
+  border-left-color: rgba(255, 255, 255, .22);
+}
+
+.amenity:first-child {
+  padding-left: 0;
+}
+
+.amenity-icon {
+  color: #ff7167;
+  font-size: 11px;
+  letter-spacing: .15em;
+}
+
+.timeline-note {
+  font-size: 11px;
+}
+
+.timeline-note strong {
+  font-size: 13px;
+}
+
+.amenity strong {
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.amenity small {
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.flow-step p {
+  font-size: 12px;
+}
+
+.flow-disclaimer {
+  font-size: 11px !important;
+}
+
+.terms {
+  background: #f0eee8;
+  color: var(--ink);
+}
+
+.terms h2 {
+  color: var(--navy);
+}
+
+.terms .eyebrow.light {
+  color: #687678;
+}
+
+.terms-intro > p:not(.eyebrow) {
+  color: #58696b;
+  font-size: 15px;
+}
+
+.terms-table {
+  border-color: #cbd1ca;
+}
+
+.term-row {
+  border-color: #d5d9d2;
+  color: #45575a;
+  font-size: 13px;
+}
+
+.term-row strong {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.term-row.highlight {
+  background: rgba(189, 74, 64, .08);
+}
+
+.term-row.highlight strong {
+  color: var(--red-dark);
+  font-size: 18px;
+}
+
+.terms-footnote {
+  color: #5c6c6d;
+  font-size: 11px;
+}
+
+.button-light {
+  background: var(--navy);
+  color: #fff;
+}
+
+.button-light:hover {
+  background: #263a42;
+  color: #fff;
+}
+
+.calc-copy > p:not(.eyebrow) {
+  font-size: 14px;
+}
+
+.calculator label {
+  font-size: 13px;
+}
+
+.input-note,
+.calc-results span,
+.calc-legal {
+  font-size: 11px;
+}
+
+.calc-disclaimer p {
+  font-size: 11px;
+}
+
+.risk-card h3 {
+  font-size: 15px;
+}
+
+.risk-card p {
+  font-size: 12px;
+}
+
+.registration-card {
+  background: #3a5052;
+}
+
+.registration-card > small {
+  font-size: 11px;
+}
+
+.partner-row small {
+  font-size: 10px;
+}
+
+.partner-card {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.partner-card strong {
+  transition: color .18s ease;
+}
+
+.partner-card strong span {
+  color: var(--red);
+  font-size: .85em;
+  margin-left: 3px;
+}
+
+.partner-card:hover strong,
+.partner-card:focus-visible strong {
+  color: var(--red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.partner-card:focus-visible,
+.redwood-contact-link:focus-visible,
+.contact-item a:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 4px;
+}
+
+.partner-row strong {
+  font-size: 13px;
+}
+
+.faq-layout > div:first-child > p:not(.eyebrow) {
+  font-size: 13px;
+}
+
+.faq-list summary {
+  font-size: 15px;
+}
+
+.faq-list details p {
+  font-size: 13px;
+}
+
+.enquiry {
+  background: #e9ece6;
+  color: var(--ink);
+}
+
+.enquiry .eyebrow.light {
+  color: #657275;
+}
+
+.enquiry h2 {
+  color: var(--navy);
+}
+
+.enquiry-copy > p:not(.eyebrow) {
+  color: #536568;
+  font-size: 15px;
+}
+
+.contact-lines a {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.contact-lines {
+  gap: 14px;
+}
+
+.contact-item {
+  display: grid;
+  gap: 3px;
+}
+
+.contact-item > small {
+  display: block;
+  margin-bottom: 4px;
+  color: #657275;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.contact-item > a {
+  display: block;
+  width: fit-content;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.contact-item > a span,
+.redwood-contact-link span {
+  color: var(--red);
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.contact-lines small {
+  color: #58696b;
+  font-size: 12px;
+}
+
+.contact-addresses {
+  border-top: 1px solid #d3dbd4;
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+.contact-addresses p {
+  color: #536568;
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.contact-addresses p strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.contact-addresses > small {
+  color: #657275;
+  font-size: 11px;
+}
+
+.redwood-contact-link {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.enquiry-form {
+  background: #fff;
+  border: 1px solid #d8ded7;
+  box-shadow: 0 12px 36px rgba(37, 55, 59, .08);
+}
+
+.form-grid label {
+  font-size: 12px;
+}
+
+.form-grid input:not([type="checkbox"]),
+.form-grid select {
+  font-size: 14px;
+}
+
+.form-note {
+  font-size: 9px;
+}
+
+#disclaimer {
+  background: #fff;
+  color: var(--ink);
+  border-top: 1px solid #e0e4df;
+}
+
+#disclaimer .footer-top {
+  min-height: 136px;
+  border-bottom-color: #e0e4df;
+}
+
+#disclaimer .brand-footer .brand-mark {
+  background: var(--navy);
+}
+
+#disclaimer .brand-footer .brand-copy strong {
+  color: var(--ink);
+}
+
+#disclaimer .brand-footer .brand-copy small {
+  color: #6f7c7c;
+}
+
+#disclaimer .footer-top > p {
+  color: #526265;
+  font-size: 15px;
+}
+
+#disclaimer .footer-up,
+#disclaimer .footer-meta a {
+  color: var(--red-dark);
+  font-size: 11px;
+}
+
+#disclaimer .footer-bottom > p {
+  color: #5d6b6d;
+  font-size: 12px;
+}
+
+#disclaimer .footer-meta {
+  color: #5d6b6d;
+  font-size: 11px;
+}
+
+@media (max-width: 720px) {
+  .site-header .brand-logo {
+    flex-basis: 116px;
+    width: 116px;
+    height: 65px;
+    padding: 5px 7px;
+  }
+
+  .hero-shade {
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, .83), rgba(0, 0, 0, .56) 78%, rgba(0, 0, 0, .46)),
+      linear-gradient(0deg, rgba(0, 0, 0, .45), transparent 48%);
+  }
+
+  .hero h1 {
+    line-height: 1.06;
+  }
+
+  .hero-note {
+    padding: 11px 14px 11px 27px;
+  }
+
+  .topline {
+    font-size: 8px;
+  }
+
+  .primary-nav > a:not(.nav-cta) {
+    font-size: 14px;
+  }
+
+  .primary-nav .nav-cta {
+    font-size: 13px;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 11vw, 48px);
+  }
+
+  .hero-lede {
+    font-size: 15px;
+  }
+
+  .button {
+    font-size: 12px;
+  }
+
+  .hero-caption {
+    font-size: 9px;
+  }
+
+  .hero-note {
+    font-size: 10px;
+  }
+
+  .stat-item strong {
+    font-size: 24px;
+  }
+
+  .stat-item small {
+    font-size: 9px;
+  }
+
+  .section-intro p,
+  .model-heading > p {
+    font-size: 14px;
+  }
+
+  .micro-label,
+  .market-stat .micro-label {
+    font-size: 10px;
+  }
+
+  .market-stat p {
+    font-size: 11px;
+  }
+
+  .market-aside p {
+    font-size: 12px;
+  }
+
+  .audience-tags span {
+    font-size: 10px;
+  }
+
+  .development-copy {
+    font-size: 14px;
+  }
+
+  .fact-grid span {
+    font-size: 11px;
+  }
+
+  .amenity {
+    padding: 14px 12px;
+  }
+
+  .amenity:first-child,
+  .amenity:nth-child(odd) {
+    padding-left: 0;
+  }
+
+  .amenity strong {
+    font-size: 14px;
+  }
+
+  .amenity small {
+    font-size: 12px;
+  }
+
+  .flow-step p {
+    font-size: 12px;
+  }
+
+  .terms-intro > p:not(.eyebrow) {
+    font-size: 14px;
+  }
+
+  .term-row {
+    font-size: 12px;
+  }
+
+  .term-row strong {
+    font-size: 13px;
+  }
+
+  .terms-footnote {
+    font-size: 10px;
+  }
+
+  .risk-card p {
+    font-size: 11px;
+  }
+
+  .faq-list summary {
+    font-size: 14px;
+  }
+
+  .faq-list details p {
+    font-size: 13px;
+  }
+
+  .enquiry-copy > p:not(.eyebrow) {
+    font-size: 14px;
+  }
+
+  .enquiry-layout > * {
+    min-width: 0;
+  }
+
+  .enquiry h2 {
+    font-size: clamp(34px, 9.5vw, 39px);
+    overflow-wrap: anywhere;
+  }
+
+  .form-grid label {
+    font-size: 11px;
+    min-width: 0;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .form-grid input:not([type="checkbox"]),
+  .form-grid select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .form-grid input:not([type="checkbox"]),
+  .form-grid select {
+    font-size: 13px;
+  }
+
+  #disclaimer .footer-top > p {
+    font-size: 12px;
+  }
+
+  #disclaimer .footer-bottom > p,
+  #disclaimer .footer-meta {
+    font-size: 11px;
+  }
+}
+
+/* Use true black for every text element on the site's light surfaces. */
+.site-header,
+.stat-ribbon,
+.section:not(.development),
+.enquiry,
+#disclaimer,
+.site-header :where(*),
+.stat-ribbon :where(*),
+.section:not(.development) :where(*),
+.enquiry :where(*),
+#disclaimer :where(*) {
+  color: #000 !important;
+}
+
+/* Keep white lettering only where the text sits on a deliberately dark or red control. */
+.nav-cta,
+.button-red,
+.button-light,
+.submit-button,
+.registration-card,
+.registration-card :where(*) {
+  color: #fff !important;
+}
+
+.site-header input::placeholder,
+.stat-ribbon input::placeholder,
+.section:not(.development) input::placeholder,
+.enquiry input::placeholder,
+#disclaimer input::placeholder {
+  color: #000;
+  opacity: 1;
+}
+
+/* Remove the low-contrast green-gray text from the dark brand surfaces. */
+.topline,
+.topline :where(*),
+.hero,
+.hero :where(*),
+.development,
+.development :where(*) {
+  color: #fff !important;
+}
+
+.topline i,
+.development .amenity-icon,
+.development .timeline-icon {
+  color: var(--button-red) !important;
+}
+
+/* Keep light-surface text strictly black and bring supporting copy up to readable sizes. */
+.site-header,
+.stat-ribbon,
+.section:not(.development),
+.enquiry,
+#disclaimer,
+.site-header :where(*),
+.stat-ribbon :where(*),
+.section:not(.development) :where(*),
+.enquiry :where(*),
+#disclaimer :where(*) {
+  color: #000 !important;
+}
+
+.site-header input::placeholder,
+.stat-ribbon input::placeholder,
+.section:not(.development) input::placeholder,
+.enquiry input::placeholder,
+#disclaimer input::placeholder {
+  color: #000;
+  opacity: 1;
+}
+
+.topline {
+  font-size: 12px;
+}
+
+.primary-nav {
+  font-size: 14px;
+}
+
+.button,
+.nav-cta {
+  font-size: 14px;
+}
+
+.eyebrow,
+.micro-label,
+.market-stat .micro-label,
+.stat-item small,
+.aside-number,
+.visual-label span,
+.fact-main > span,
+.image-tag,
+.fact-grid span,
+.amenity-icon,
+.flow-step > span,
+.registration-card > small,
+.partner-row small,
+.form-heading,
+.form-grid label,
+.contact-item > small {
+  font-size: 12px;
+}
+
+.hero-caption,
+.terms-footnote,
+.input-note,
+.calc-legal,
+.form-note,
+.form-status,
+.footer-bottom > p,
+.footer-meta {
+  font-size: 13px;
+}
+
+.flow-disclaimer {
+  font-size: 13px !important;
+}
+
+.hero-note {
+  font-size: 14px;
+}
+
+.section-intro p,
+.model-heading > p,
+.governance-header > div:nth-child(2) > p,
+.enquiry-copy > p:not(.eyebrow) {
+  font-size: 16px;
+}
+
+.text-link,
+.redwood-contact-link {
+  font-size: 14px;
+}
+
+.market-stat p,
+.fact-main p,
+.risk-card p,
+.faq-list details p,
+.contact-addresses p {
+  font-size: 14px;
+}
+
+.market-aside p,
+.calc-copy > p:not(.eyebrow) {
+  font-size: 15px;
+}
+
+.calc-results span,
+.calc-results span small,
+.risk-card > span {
+  font-size: 13px;
+}
+
+.audience-tags span,
+.fact-grid span,
+.timeline-note,
+.flow-step p,
+.terms-footnote,
+.calc-top,
+.calc-disclaimer p,
+.contact-addresses > small {
+  font-size: 13px;
+}
+
+.timeline-note strong,
+.flow-step h3,
+.risk-card h3,
+.partner-row strong,
+.contact-addresses p strong {
+  font-size: 16px;
+}
+
+.amenity strong {
+  font-size: 17px;
+}
+
+.amenity small {
+  font-size: 14px;
+}
+
+.term-row {
+  font-size: 14px;
+}
+
+.term-row strong {
+  font-size: 15px;
+}
+
+.calculator label,
+.contact-lines a,
+.contact-item > a {
+  font-size: 15px;
+}
+
+.partner-row small,
+.form-note,
+.form-status,
+.footer-up {
+  font-size: 12px;
+}
+
+@media (max-width: 720px) {
+  .topline {
+    font-size: 11px;
+  }
+
+  .primary-nav > a:not(.nav-cta),
+  .primary-nav .nav-cta {
+    font-size: 14px;
+  }
+
+  .button {
+    font-size: 13px;
+  }
+
+  .hero-caption {
+    font-size: 12px;
+  }
+
+  .hero-note {
+    font-size: 12px;
+  }
+
+  .stat-item small,
+  .micro-label,
+  .market-stat .micro-label,
+  .fact-grid span,
+  .flow-step > span {
+    font-size: 12px;
+  }
+
+  .section-intro p,
+  .model-heading > p,
+  .governance-header > div:nth-child(2) > p,
+  .faq-list details p {
+    font-size: 14px;
+  }
+
+  .market-stat p,
+  .risk-card p,
+  .terms-footnote,
+  .input-note,
+  .calc-legal,
+  .form-note,
+  .form-status,
+  .footer-bottom > p,
+  .footer-meta {
+    font-size: 12px;
+  }
+
+  .flow-step p {
+    font-size: 13px;
+  }
+
+  .flow-disclaimer {
+    font-size: 12px !important;
+  }
+
+  .market-aside p,
+  .calc-copy > p:not(.eyebrow),
+  .enquiry-copy > p:not(.eyebrow) {
+    font-size: 14px;
+  }
+
+  .audience-tags span,
+  .form-grid label,
+  .contact-item > small {
+    font-size: 12px;
+  }
+
+  .fact-main p,
+  .faq-list details p {
+    font-size: 14px;
+  }
+
+  .faq-list summary {
+    font-size: 15px;
+  }
+
+  .amenity strong {
+    font-size: 15px;
+  }
+
+  .amenity small,
+  .contact-addresses p {
+    font-size: 13px;
+  }
+
+  .enquiry-copy > p:not(.eyebrow) {
+    font-size: 15px;
+  }
+
+  .term-row {
+    font-size: 13px;
+  }
+
+  .term-row strong,
+  .risk-card h3,
+  .partner-row strong,
+  .contact-lines a,
+  .contact-item > a {
+    font-size: 14px;
+  }
+
+  .calculator label,
+  .form-grid input:not([type="checkbox"]),
+  .form-grid select {
+    font-size: 14px;
+  }
+}
+
+.site-header .nav-cta,
+.section:not(.development) :is(.button-red, .button-light, .submit-button, .registration-card, .registration-card :where(*)),
+.enquiry :is(.button-red, .button-light, .submit-button) {
+  color: #fff !important;
+}

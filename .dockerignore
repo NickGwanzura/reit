@@ -1,0 +1,15 @@
+.git
+.github
+.next
+node_modules
+out
+build
+dist
+coverage
+.env*
+!.env.example
+*.tsbuildinfo
+*.log
+npm-debug.log*
+Thumbs.db
+.DS_Store

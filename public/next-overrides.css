@@ -1,0 +1,19 @@
+:root{--navy:#292978;--navy2:#34347f;--ink:#182751;--red:#e51b2b;--red-dark:#bf1422;--cream:#f6f5f1}
+:root{--sans:var(--font-overused-grotesk),Arial,sans-serif;--display:var(--font-overused-grotesk),Arial,sans-serif}
+.hero h1,.section h2,.terms h2,.enquiry h2{font-family:var(--display);font-weight:600;letter-spacing:-.035em;line-height:1.08;font-variant-numeric:lining-nums tabular-nums}
+.topline{background:#201f65}
+.site-header{height:96px}
+.brand-logo{display:block;flex:0 0 154px;width:154px;height:86px;overflow:hidden}
+.logo-crop{display:block;position:relative;width:154px;height:86px;overflow:hidden;background:#fff}
+.logo-crop img{position:absolute;left:0;top:0;display:block;width:100%!important;height:100%!important;max-width:none;object-fit:cover!important;object-position:center}
+.brand-footer{flex-basis:154px}
+.hero{background:#292978}
+.hero-art{width:80%;opacity:1}
+.hero-art img{object-position:center 54%}
+.hero-shade{background:linear-gradient(90deg,#292978 0%,rgba(41,41,120,.98) 21%,rgba(41,41,120,.84) 42%,rgba(41,41,120,.34) 70%,rgba(41,41,120,.04) 100%),linear-gradient(0deg,rgba(26,25,86,.34),transparent 45%)}
+.terms,footer{background:#292978}
+.enquiry{background:#34347f}
+.project-feature{background:#34347f}
+.image-tag{background:rgba(34,34,104,.86)}
+@media(max-width:720px){.site-header{height:66px}.brand-logo{flex-basis:116px;width:116px;height:65px}.logo-crop{width:116px;height:65px}.primary-nav{top:66px}.brand-footer{flex-basis:116px}.hero-art{width:100%}.hero-art img{object-position:62% 54%}.hero-shade{background:linear-gradient(90deg,rgba(41,41,120,.91),rgba(41,41,120,.63) 72%,rgba(41,41,120,.45)),linear-gradient(0deg,rgba(26,25,86,.62),transparent 53%)}}
+@media(max-width:720px){.model-heading{display:grid;grid-template-columns:1fr;gap:18px}.model-heading>p{max-width:none;margin:0}.micro-label{font-size:8px}.market-stat p{font-size:9px}.market-aside p{font-size:11px;max-width:none}.flow-step p{font-size:10px}.amenity small{font-size:9px}.risk-card p{font-size:9px}.faq-list details p{font-size:10px}.terms-footnote{font-size:9px}.form-grid label{font-size:9px}.footer-bottom>p{font-size:8px}}
