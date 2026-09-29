@@ -1,14 +1,5 @@
 import "server-only";
-
-export function hasValidOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return false;
-  try {
-    return new URL(origin).origin === new URL(request.url).origin;
-  } catch {
-    return false;
-  }
-}
+export { hasValidOrigin } from "@/lib/origin";
 
 export type JsonBodyResult =
   | { ok: true; value: unknown }

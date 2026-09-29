@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { leadSubmissionSchema, normalizePhone, safeLandingPath } from "../lib/validation/lead.ts";
+import { hasValidOrigin } from "../lib/origin.ts";
 
 function validPayload(overrides = {}) {
   return {
@@ -50,4 +51,22 @@ test("normalizes phone digits and limits landing attribution to a local path", (
   assert.equal(normalizePhone("+263 (77) 123-4567"), "+263771234567");
   assert.equal(safeLandingPath("/?utm_campaign=web"), "/?utm_campaign=web");
   assert.equal(safeLandingPath("https://attacker.invalid/path"), undefined);
+});
+
+test("accepts the configured HTTPS origin when the reverse proxy reports an internal request origin", () => {
+  process.env.AUTH_URL = "https://mutirikwireitzim.com";
+  const request = new Request("http://mutirikwireitzim.com/api/admin/me/password", {
+    method: "PATCH",
+    headers: { origin: "https://mutirikwireitzim.com" },
+  });
+  assert.equal(hasValidOrigin(request), true);
+});
+
+test("rejects missing and unrelated request origins", () => {
+  process.env.AUTH_URL = "https://mutirikwireitzim.com";
+  assert.equal(hasValidOrigin(new Request("https://mutirikwireitzim.com/api/admin/me/password", { method: "PATCH" })), false);
+  assert.equal(hasValidOrigin(new Request("http://internal/api/admin/me/password", {
+    method: "PATCH",
+    headers: { origin: "https://attacker.invalid" },
+  })), false);
 });
