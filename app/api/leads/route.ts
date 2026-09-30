@@ -3,7 +3,7 @@ import { captureLead } from "@/lib/lead-service";
 import { deliverLeadEmails } from "@/lib/email";
 import { consumeLeadRateLimit, hashClientAddress } from "@/lib/rate-limit";
 import { leadSubmissionSchema } from "@/lib/validation/lead";
-import { readJsonBody } from "@/lib/api-security";
+import { hasValidOrigin, readJsonBody } from "@/lib/api-security";
 import {
   BROCHURE_ACCESS_COOKIE,
   BROCHURE_ACCESS_TTL_SECONDS,
@@ -15,15 +15,8 @@ export const runtime = "nodejs";
 const MAX_BODY_BYTES = 12_000;
 
 export async function POST(request: Request) {
-  const origin = request.headers.get("origin");
-  if (origin) {
-    try {
-      if (new URL(origin).origin !== new URL(request.url).origin) {
-        return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
-      }
-    } catch {
-      return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
-    }
+  if (!hasValidOrigin(request)) {
+    return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
   }
 
   const body = await readJsonBody(request, MAX_BODY_BYTES);
