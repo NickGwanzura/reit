@@ -5,6 +5,7 @@
 - Public enquiry endpoint with strict field validation, consent capture, same-origin checks, a honeypot, request-size limits, and database-backed IP rate limiting.
 - PostgreSQL persistence for contacts, current lead state, immutable enquiry snapshots, marketing attribution, activities, tasks, and audit events.
 - Staff sign-in, password hashing, throttling, role checks, relationship-manager assignment scope, and a private lead workspace.
+- A shared staff sidebar and super-admin-only staff invitation workflow with branded Resend emails, one-use expiring activation links, resend/revoke controls, and account audit events.
 - CRM actions for stage changes, lead assignment, notes/contact activities, and follow-up task management.
 - Optional Resend acknowledgement and internal notification after the lead is safely stored.
 - Production migrations applied at container startup; the database service remains private.

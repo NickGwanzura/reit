@@ -139,3 +139,78 @@
 @media(max-width:980px){.crm-profile-grid{grid-template-columns:.8fr 1.2fr}.crm-follow-up{grid-column:1/-1}.crm-metrics article{padding:18px 15px}.crm-global-tasks article{grid-template-columns:38px 1fr auto}.crm-global-tasks time{grid-column:2}.crm-global-tasks button{grid-column:3;grid-row:1/3}}
 @media(max-width:700px){.crm-header{height:auto;min-height:68px;padding:12px 18px;gap:12px;flex-wrap:wrap}.crm-header nav{height:42px;order:3;width:100%;border-top:1px solid #eceef0}.crm-header nav a{font-size:13px;padding:0 11px}.crm-account{gap:9px;font-size:12px}.crm-account button{font-size:11px;padding:8px}.crm-main{width:calc(100% - 32px);padding-top:30px}.crm-page-heading{align-items:flex-start;flex-direction:column}.crm-public-link{margin-top:0}.crm-metrics{grid-template-columns:1fr 1fr;margin-bottom:35px}.crm-metrics article{min-height:106px;padding:14px;border-bottom:1px solid #e4e6e9}.crm-metrics article:nth-child(2){border-right:0}.crm-metrics article:nth-child(n+3){border-bottom:0}.crm-metrics strong{font-size:29px}.crm-metrics span{font-size:9px}.crm-metrics small{font-size:11px}.crm-section-heading{align-items:flex-start;flex-direction:column}.crm-filters{width:100%;display:grid;grid-template-columns:1.2fr .8fr}.crm-filters input{width:100%;min-width:0}.crm-filters select{max-width:100%;font-size:12px;padding-inline:7px}.crm-lead-top{align-items:flex-start;flex-direction:column;padding:17px 15px;gap:16px}.crm-person{min-width:0}.crm-lead-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}.crm-lead-actions label{min-width:0}.crm-lead-actions select{font-size:11px;padding-inline:7px}.crm-lead-facts{grid-template-columns:1fr 1fr;padding:13px 15px;gap:13px}.crm-lead-facts span{font-size:8px}.crm-lead-facts strong{font-size:12px}.crm-details>summary{padding:14px 15px;font-size:13px}.crm-details>summary span{font-size:10px}.crm-profile-grid{grid-template-columns:1fr;padding:16px;gap:23px}.crm-follow-up{grid-column:auto}.crm-global-tasks article{grid-template-columns:34px 1fr;gap:11px;padding:13px}.crm-global-tasks time{grid-column:2}.crm-global-tasks button{grid-column:2;grid-row:auto;justify-self:start}.crm-auth-card{padding:28px 22px}.crm-section-heading h2{font-size:25px}}
 @media(max-width:700px){.crm-team-create,.crm-team-list{padding:17px}.crm-team-form{grid-template-columns:1fr}.crm-team-form .crm-button{justify-self:start}.crm-team-list article{grid-template-columns:1fr auto;gap:7px}.crm-team-list article>small{grid-column:2;grid-row:1}.crm-temp-password>div{flex-direction:column}.crm-temp-password button{min-height:42px}}
+
+/* Authenticated CRM sidebar and email-invitation workspace */
+.crm-admin-layout{display:grid;grid-template-columns:252px minmax(0,1fr);background:#f4f5f7;min-height:100vh}
+.crm-sidebar{position:sticky;top:0;z-index:20;height:100vh;min-height:600px;padding:26px 17px 16px;background:#14243d;color:#fff;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.08)}
+.crm-sidebar-brand{display:flex;align-items:center;gap:12px;padding:2px 8px 27px;color:#fff}
+.crm-brand-mark{height:39px;width:39px;border:1px solid rgba(255,255,255,.28);display:grid;place-items:center;color:#fff;font-family:var(--font-source-serif-4),Georgia,serif;font-size:25px;font-weight:700;position:relative}
+.crm-brand-mark:after{content:"";height:3px;background:#ed1c24;position:absolute;bottom:-1px;left:-1px;right:-1px}
+.crm-sidebar-brand-name{display:grid;font-size:12px;font-weight:900;letter-spacing:.12em;line-height:1.35}
+.crm-sidebar-brand-name b{color:#f04449;font-weight:900}
+.crm-sidebar-brand-name small{font-size:9px;letter-spacing:.16em;color:#c5ccd6;margin-top:4px}
+.crm-sidebar-caption{margin:6px 9px 10px;color:#aeb9c9;font-size:9px;letter-spacing:.16em;font-weight:800}
+.crm-sidebar-nav{display:grid;gap:5px}
+.crm-sidebar-nav a{min-height:44px;padding:0 10px;display:flex;align-items:center;gap:11px;border:1px solid transparent;color:#e6eaf0;font-size:13px;font-weight:650;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.crm-sidebar-nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.crm-sidebar-nav a.active{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.12);color:#fff;box-shadow:inset 3px 0 #ed1c24}
+.crm-sidebar-icon{width:20px;display:grid;place-items:center;color:#f04449;font-size:17px;line-height:1}
+.crm-sidebar-new{margin-left:auto;padding:4px 6px;background:rgba(237,28,36,.16);color:#ff8c91;font-size:8px;letter-spacing:.08em;font-weight:800}
+.crm-sidebar-account-label{margin-top:30px}
+.crm-sidebar-spacer{flex:1}
+.crm-sidebar-user{display:flex;align-items:center;gap:10px;padding:14px 5px 4px;border-top:1px solid rgba(255,255,255,.15)}
+.crm-sidebar-avatar{height:34px;width:34px;flex:none;border-radius:50%;display:grid;place-items:center;background:#fff;color:#14243d;font-size:11px;font-weight:900}
+.crm-sidebar-user-info{display:grid;gap:3px;min-width:0;flex:1}
+.crm-sidebar-user-info strong{font-size:12px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crm-sidebar-user-info small{font-size:10px;color:#bec8d5}
+.crm-sidebar-user button{width:31px;height:31px;border:1px solid rgba(255,255,255,.24);background:transparent;color:#fff;font-size:15px;cursor:pointer}
+.crm-sidebar-user button:hover{border-color:#ff676d;background:rgba(237,28,36,.15)}
+.crm-admin-content{min-width:0}
+.crm-admin-content>.crm-main{width:min(1420px,calc(100% - 64px));padding-top:42px}
+.crm-team-main{max-width:1320px!important}
+.crm-team-workspace{display:grid;gap:20px}
+.crm-team-create,.crm-team-list{padding:26px;background:#fff;border:1px solid #e0e4e9;box-shadow:0 5px 18px rgba(20,36,61,.035)}
+.crm-team-card-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px}
+.crm-team-card-heading .crm-kicker{margin:0 0 7px}
+.crm-team-card-heading h2{font-size:22px;letter-spacing:-.025em;margin:0;color:#111820}
+.crm-team-create>p{max-width:760px;color:#48515c;font-size:14px;line-height:1.65;margin:9px 0 22px}
+.crm-invite-lock{height:42px;width:42px;border:1px solid #e1e5e9;display:grid;place-items:center;color:#e51f2a;font-size:20px}
+.crm-team-form{grid-template-columns:1fr 1.2fr 1fr auto;gap:14px}
+.crm-team-form label{font-size:11px;letter-spacing:.035em}
+.crm-team-form input,.crm-team-form select{width:100%;height:47px;border-color:#d2d8de;transition:border-color .18s ease,box-shadow .18s ease}
+.crm-team-form input:focus,.crm-team-form select:focus{outline:none;border-color:#546984;box-shadow:0 0 0 3px rgba(20,36,61,.1)}
+.crm-team-form .crm-button{height:47px;padding-inline:19px}
+.crm-team-create>.crm-message{margin:17px 0 0}
+.crm-team-count{padding:7px 10px;border:1px solid #e1e5e9;background:#fafbfc;color:#3c4550;font-size:11px;font-weight:750;white-space:nowrap}
+.crm-team-table-wrap{overflow-x:auto;border-top:1px solid #e7eaee}
+.crm-team-table{width:100%;border-collapse:collapse;text-align:left;min-width:720px}
+.crm-team-table th{height:42px;padding:0 13px;color:#545e69;font-size:9px;letter-spacing:.12em;font-weight:800;text-transform:uppercase}
+.crm-team-table td{padding:14px 13px;border-top:1px solid #eceef1;color:#272f38;font-size:12px;vertical-align:middle}
+.crm-team-table tbody tr:hover{background:#fafbfc}
+.crm-team-table td:first-child{min-width:220px}
+.crm-team-table td:first-child strong,.crm-team-table td:first-child a{display:block}
+.crm-team-table td:first-child strong{color:#111820;font-size:13px;margin-bottom:4px}
+.crm-team-table td:first-child a{color:#404a55;font-size:12px;overflow-wrap:anywhere}
+.crm-invite-status{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;font-size:10px;font-weight:750;white-space:nowrap}
+.crm-invite-status:before{content:"";height:6px;width:6px;border-radius:50%;background:currentColor}
+.crm-invite-status.pending{color:#805a13;background:#fff7e6}
+.crm-invite-status.failed,.crm-invite-status.expired{color:#a12c28;background:#fff0ef}
+.crm-invite-status.accepted{color:#225c3c;background:#edf7f0}
+.crm-invite-status.revoked{color:#59616b;background:#f0f2f4}
+.crm-invite-actions{white-space:nowrap;text-align:right}
+.crm-invite-actions button{height:32px;margin-left:7px;padding:0 10px;border:1px solid #cbd2da;background:#fff;color:#16253c;font:inherit;font-size:11px;font-weight:750;cursor:pointer}
+.crm-invite-actions button:hover{border-color:#526781;background:#f7f9fb}
+.crm-invite-actions button.revoke{color:#a51d25;border-color:#ead2d2}
+.crm-invite-actions button.revoke:hover{border-color:#c84b50;background:#fff8f8}
+.crm-invite-actions button:disabled{opacity:.5;cursor:wait}
+.crm-team-empty{padding:23px 4px 4px;margin:0;color:#505861;font-size:13px}
+.crm-members-list .crm-small-print{margin:18px 0 0}
+.crm-security-main .crm-auth-card{max-width:610px;margin:0 auto;padding:32px}
+.crm-security-main .crm-auth-card h1{margin-bottom:8px}
+.crm-invite-success{display:grid;gap:14px}
+.crm-invite-signin{min-height:47px;display:inline-flex;align-items:center;justify-content:center;text-align:center}
+
+@media(max-width:1120px){.crm-admin-layout{grid-template-columns:220px minmax(0,1fr)}.crm-sidebar{padding-inline:13px}.crm-admin-content>.crm-main{width:calc(100% - 42px)}.crm-team-form{grid-template-columns:1fr 1.1fr 1fr}.crm-team-form .crm-button{grid-column:1/-1;justify-self:start}}
+@media(max-width:820px){.crm-admin-layout{display:block}.crm-sidebar{position:relative;height:auto;min-height:0;padding:12px 18px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px}.crm-sidebar-brand{padding:0 2px 10px}.crm-brand-mark{height:34px;width:34px}.crm-sidebar-brand-name{font-size:11px}.crm-sidebar-brand-name small{font-size:8px}.crm-sidebar-caption,.crm-sidebar-spacer{display:none}.crm-sidebar-nav{grid-column:1/-1;display:flex;gap:4px;overflow-x:auto;border-top:1px solid rgba(255,255,255,.13);scrollbar-width:thin}.crm-sidebar-nav a{min-height:44px;flex:none;padding:0 11px;font-size:12px}.crm-sidebar-icon{width:auto;font-size:15px}.crm-sidebar-new{display:none}.crm-sidebar-user{grid-column:2;grid-row:1;border:0;padding:0 0 9px;gap:8px}.crm-sidebar-avatar{width:30px;height:30px;font-size:10px}.crm-sidebar-user-info{max-width:145px}.crm-sidebar-user-info strong{font-size:11px}.crm-sidebar-user-info small{font-size:9px}.crm-sidebar-user button{height:29px;width:29px}.crm-admin-content>.crm-main{width:calc(100% - 38px);padding-top:30px}}
+@media(max-width:700px){.crm-admin-content>.crm-main{width:calc(100% - 30px);padding-top:25px}.crm-team-main{max-width:none!important}.crm-team-form{grid-template-columns:1fr}.crm-team-form .crm-button{grid-column:auto;justify-self:stretch}.crm-team-create,.crm-team-list{padding:18px}.crm-team-card-heading h2{font-size:19px}.crm-team-count{font-size:10px}.crm-sidebar{padding-inline:12px}.crm-sidebar-user-info{max-width:110px}.crm-security-main .crm-auth-card{padding:24px 19px}.crm-invite-lock{height:35px;width:35px}}
+@media(prefers-reduced-motion:reduce){.crm-sidebar-nav a,.crm-team-form input,.crm-team-form select{transition:none}}

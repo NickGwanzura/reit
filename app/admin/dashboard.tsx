@@ -1,7 +1,7 @@
 "use client";
 
-import { signOut } from "next-auth/react";
 import { useMemo, useState, type FormEvent } from "react";
+import { AdminFrame } from "@/app/admin/admin-frame";
 
 const stages = [
   "NEW_LEAD", "CONTACTED", "QUALIFIED", "INTERESTED", "KYC_STARTED", "KYC_SUBMITTED",
@@ -158,14 +158,8 @@ export function LeadDashboard({ name, role, leads, tasks, users, counts }: Props
   }
 
   return (
-    <main className="crm-shell">
-      <header className="crm-header">
-        <a className="crm-brand" href="/">MUTIRIKWI <span>REIT</span></a>
-        <nav aria-label="CRM sections"><a className="active" href="/admin">Leads</a><a href="#follow-ups">Follow-ups</a>{role === "SUPER_ADMIN" && <a href="/admin/team">Team</a>}</nav>
-        <div className="crm-account"><span>{name}<small>{human(role)}</small></span><a className="crm-security-link" href="/admin/security">Security</a><button type="button" onClick={() => signOut({ redirectTo: "/admin/login" })}>Sign out</button></div>
-      </header>
-
-      <section className="crm-main">
+    <AdminFrame name={name} role={role}>
+      <main className="crm-main">
         <div className="crm-page-heading">
           <div><p className="crm-kicker">MUTIRIKWI REIT · RELATIONSHIP MANAGEMENT</p><h1>Lead workspace</h1><p>Enquiries, follow-ups and pipeline movement in one place.</p></div>
           <a className="crm-public-link" href="/#enquire">View public website ↗</a>
@@ -248,7 +242,7 @@ export function LeadDashboard({ name, role, leads, tasks, users, counts }: Props
           {messages.tasks && <p className="crm-message crm-error" role="alert">{messages.tasks}</p>}
         </section>
         <footer className="crm-footer">Private lead-management workspace · Enquiry interest is not settled capital or an investment allocation.</footer>
-      </section>
-    </main>
+      </main>
+    </AdminFrame>
   );
 }

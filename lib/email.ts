@@ -159,3 +159,46 @@ export async function deliverLeadEmails(lead: LeadEmail) {
     console.error("A lead email could not be delivered.");
   }
 }
+
+export async function sendStaffInviteEmail(input: {
+  email: string;
+  name: string;
+  role: "FUND_MANAGER" | "RELATIONSHIP_MANAGER";
+  inviteUrl: string;
+  expiresAt: Date;
+}) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+  if (!apiKey || !from) return false;
+
+  const roleLabel = input.role === "FUND_MANAGER" ? "Fund manager" : "Relationship manager";
+  const greeting = escapeHtml(input.name);
+  const safeUrl = escapeHtml(input.inviteUrl);
+  const expiry = new Intl.DateTimeFormat("en", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Africa/Harare",
+  }).format(input.expiresAt);
+  const content = `
+    <p style="margin:0 0 9px;color:#ed1c24;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">Staff access invitation</p>
+    <h1 style="margin:0 0 16px;color:#14243d;font-size:27px;line-height:1.2">You’re invited, ${greeting}.</h1>
+    <p style="margin:0 0 16px;color:#354052;font-size:15px;line-height:1.75">You have been invited to the Mutirikwi REIT staff workspace as a <strong>${roleLabel}</strong>. Use the secure link below to activate your account and choose your own password.</p>
+    <table role="presentation" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td style="background:#ed1c24"><a href="${safeUrl}" style="display:inline-block;padding:14px 20px;color:#fff;text-decoration:none;font-size:14px;font-weight:700">Accept invitation&nbsp; →</a></td></tr></table>
+    <p style="margin:0 0 12px;color:#586477;font-size:13px;line-height:1.65">This invitation expires on <strong>${escapeHtml(expiry)} (Harare time)</strong>. The link can be used once. If you were not expecting this invitation, you can ignore this email.</p>
+    <p style="margin:0;color:#657083;font-size:12px;line-height:1.6;word-break:break-word">If the button does not work, copy this address into your browser:<br>${safeUrl}</p>`;
+
+  try {
+    const { error } = await new Resend(apiKey).emails.send({
+      from,
+      to: [input.email],
+      replyTo: "info@redwood.co.zw",
+      subject: "Your Mutirikwi REIT staff invitation",
+      text: `Hello ${input.name},\n\nYou have been invited to the Mutirikwi REIT staff workspace as a ${roleLabel}. Accept the invitation and choose your own password here:\n${input.inviteUrl}\n\nThis link expires on ${expiry} (Harare time) and can be used once. If you were not expecting this invitation, you can ignore this email.\n\nMutirikwi REIT`,
+      html: emailShell(content, `You have been invited to join the Mutirikwi REIT staff workspace as a ${roleLabel}.`),
+    });
+    return !error;
+  } catch {
+    // Keep provider details and invite tokens out of logs.
+    return false;
+  }
+}

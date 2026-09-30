@@ -120,6 +120,27 @@ model User {
   createdTasks    Task[]   @relation("CreatedTasks")
   activities      Activity[] @relation("ActivityActor")
   auditLogs       AuditLog[] @relation("AuditActor")
+  sentStaffInvites StaffInvite[] @relation("StaffInviteSender")
+}
+
+model StaffInvite {
+  id          String   @id @default(cuid())
+  email       String
+  name        String
+  role        UserRole
+  tokenHash   String   @unique
+  invitedById String
+  expiresAt   DateTime
+  sentAt      DateTime?
+  acceptedAt  DateTime?
+  revokedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  invitedBy User @relation("StaffInviteSender", fields: [invitedById], references: [id], onDelete: Restrict)
+
+  @@index([email, createdAt])
+  @@index([expiresAt])
 }
 
 model Contact {
