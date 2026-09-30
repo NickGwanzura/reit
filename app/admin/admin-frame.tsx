@@ -12,10 +12,12 @@ function labelRole(role: string) {
   return role.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-function SidebarIcon({ name }: { name: "leads" | "followups" | "team" | "settings" | "website" }) {
+function SidebarIcon({ name }: { name: "leads" | "followups" | "reports" | "audit" | "team" | "settings" | "website" }) {
   const paths = {
     leads: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" /></>,
     followups: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+    reports: <><path d="M4 19V5M4 19h16" /><path d="m7 15 4-4 3 2 5-6" /></>,
+    audit: <><path d="M12 3 5 6v5c0 4.5 2.8 7.8 7 10 4.2-2.2 7-5.5 7-10V6l-7-3Z" /><path d="m9 12 2 2 4-4" /></>,
     team: <><circle cx="9" cy="8" r="3" /><path d="M3.5 20c.3-3.1 2.1-5 5.5-5s5.2 1.9 5.5 5" /><path d="M16 5.5a3 3 0 0 1 0 5.8M17 15c2.2.4 3.3 1.9 3.5 4" /></>,
     settings: <><path d="M4 6h16M4 12h16M4 18h16" /><circle cx="9" cy="6" r="2" fill="#14243d" /><circle cx="15" cy="12" r="2" fill="#14243d" /><circle cx="11" cy="18" r="2" fill="#14243d" /></>,
     website: <><path d="M14 4h6v6M20 4l-9 9" /><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6" /></>,
@@ -39,7 +41,9 @@ export function AdminFrame({ name, role, children }: { name: string; role: strin
         <nav className="crm-sidebar-nav" aria-label="Staff workspace">
           <a className={pathname === "/admin" ? "active" : ""} href="/admin"><span className="crm-sidebar-icon"><SidebarIcon name="leads" /></span><span>Leads</span></a>
           <a href="/admin#follow-ups"><span className="crm-sidebar-icon"><SidebarIcon name="followups" /></span><span>Follow-ups</span></a>
+          <a className={pathname.startsWith("/admin/reports") ? "active" : ""} href="/admin/reports"><span className="crm-sidebar-icon"><SidebarIcon name="reports" /></span><span>Reports</span></a>
           {isSuperAdmin && <a className={pathname.startsWith("/admin/team") ? "active" : ""} href="/admin/team"><span className="crm-sidebar-icon"><SidebarIcon name="team" /></span><span>Team & invites</span><span className="crm-sidebar-new">ADMIN</span></a>}
+          {isSuperAdmin && <a className={pathname.startsWith("/admin/audit") ? "active" : ""} href="/admin/audit"><span className="crm-sidebar-icon"><SidebarIcon name="audit" /></span><span>Audit log</span></a>}
         </nav>
         <p className="crm-sidebar-caption crm-sidebar-account-label">ACCOUNT</p>
         <nav className="crm-sidebar-nav" aria-label="Account settings">

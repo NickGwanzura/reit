@@ -214,3 +214,50 @@
 @media(max-width:820px){.crm-admin-layout{display:block}.crm-sidebar{position:relative;height:auto;min-height:0;padding:12px 18px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px}.crm-sidebar-brand{padding:0 2px 10px}.crm-brand-mark{height:34px;width:34px}.crm-sidebar-brand-name{font-size:11px}.crm-sidebar-brand-name small{font-size:8px}.crm-sidebar-caption,.crm-sidebar-spacer{display:none}.crm-sidebar-nav{grid-column:1/-1;display:flex;gap:4px;overflow-x:auto;border-top:1px solid rgba(255,255,255,.13);scrollbar-width:thin}.crm-sidebar-nav a{min-height:44px;flex:none;padding:0 11px;font-size:12px}.crm-sidebar-icon{width:auto;font-size:15px}.crm-sidebar-new{display:none}.crm-sidebar-user{grid-column:2;grid-row:1;border:0;padding:0 0 9px;gap:8px}.crm-sidebar-avatar{width:30px;height:30px;font-size:10px}.crm-sidebar-user-info{max-width:145px}.crm-sidebar-user-info strong{font-size:11px}.crm-sidebar-user-info small{font-size:9px}.crm-sidebar-user button{height:29px;width:29px}.crm-admin-content>.crm-main{width:calc(100% - 38px);padding-top:30px}}
 @media(max-width:700px){.crm-admin-content>.crm-main{width:calc(100% - 30px);padding-top:25px}.crm-team-main{max-width:none!important}.crm-team-form{grid-template-columns:1fr}.crm-team-form .crm-button{grid-column:auto;justify-self:stretch}.crm-team-create,.crm-team-list{padding:18px}.crm-team-card-heading h2{font-size:19px}.crm-team-count{font-size:10px}.crm-sidebar{padding-inline:12px}.crm-sidebar-user-info{max-width:110px}.crm-security-main .crm-auth-card{padding:24px 19px}.crm-invite-lock{height:35px;width:35px}}
 @media(prefers-reduced-motion:reduce){.crm-sidebar-nav a,.crm-team-form input,.crm-team-form select{transition:none}}
+
+/* CRM reporting and audit workspace */
+.crm-report-main,.crm-audit-main{max-width:1420px!important}
+.crm-report-workspace{display:grid;gap:20px}
+.crm-report-topline{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.crm-report-topline>p{margin:0;color:#4b5562;font-size:13px}
+.crm-report-export{min-height:42px;display:inline-flex;align-items:center;gap:16px;padding:0 15px}
+.crm-report-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.crm-report-kpis article{min-width:0;min-height:142px;padding:20px;background:#fff;border:1px solid #e0e4e9;box-shadow:0 5px 18px rgba(20,36,61,.035);display:flex;flex-direction:column;align-items:flex-start}
+.crm-report-kpis article>span{color:#48515c;font-size:12px;font-weight:700}
+.crm-report-kpis article>strong{margin-top:13px;color:#14243d;font-size:clamp(30px,3vw,39px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.crm-report-kpis article>small{margin-top:10px;color:#56606a;font-size:11px;line-height:1.4}
+.crm-report-kpis article>small.crm-report-up{color:#17613b}.crm-report-kpis article>small.crm-report-down{color:#a51d25}
+.crm-report-card,.crm-audit-card{min-width:0;padding:24px;background:#fff;border:1px solid #e0e4e9;box-shadow:0 5px 18px rgba(20,36,61,.035)}
+.crm-report-card-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+.crm-report-card-head .crm-kicker{margin:0 0 6px}.crm-report-card-head h2{margin:0;color:#111820;font-size:22px;letter-spacing:-.025em}
+.crm-report-card-head>span{color:#505a65;font-size:12px}
+.crm-report-chart{height:235px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;border-bottom:1px solid #dce1e6;padding:0 8px}
+.crm-report-bar-group{height:100%;min-width:0;display:grid;grid-template-rows:22px 1fr 28px;justify-items:center;align-items:end;gap:7px}
+.crm-report-bar-group>strong{color:#26394e;font-size:12px;font-variant-numeric:tabular-nums}
+.crm-report-bar-track{height:100%;width:min(48px,70%);display:flex;align-items:flex-end;background:#f3f5f7;border-radius:3px 3px 0 0;overflow:hidden}
+.crm-report-bar-track>span{width:100%;min-height:0;background:linear-gradient(180deg,#ed1c24,#c91720);border-radius:3px 3px 0 0;transition:height .35s ease}
+.crm-report-bar-group>small{align-self:center;color:#4c5661;font-size:11px;text-align:center;white-space:nowrap}
+.crm-report-lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.crm-report-breakdown{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.crm-report-breakdown li{display:grid;gap:7px}
+.crm-report-breakdown li>div{display:flex;align-items:center;justify-content:space-between;gap:15px;color:#303943;font-size:13px}
+.crm-report-breakdown li>div strong{color:#14243d;font-size:14px;font-variant-numeric:tabular-nums}
+.crm-report-meter{height:6px;background:#edf0f3;display:block;overflow:hidden;border-radius:10px}
+.crm-report-meter i{height:100%;display:block;background:#ed1c24;border-radius:10px}
+.crm-report-empty{margin:0;padding:16px 0;color:#4b5562;font-size:13px;line-height:1.6}
+.crm-report-footnote{margin:0;color:#505a65;font-size:11px;line-height:1.6}
+.crm-audit-card{padding:0 23px 18px}
+.crm-audit-table-wrap{width:100%;overflow-x:auto}
+.crm-audit-table{width:100%;min-width:700px;border-collapse:collapse;text-align:left}
+.crm-audit-table th{height:47px;padding:0 12px;border-bottom:1px solid #e3e7eb;color:#59636e;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.crm-audit-table td{padding:14px 12px;border-bottom:1px solid #edf0f2;color:#353e48;font-size:12px;vertical-align:top}
+.crm-audit-table tbody tr:hover{background:#fafbfc}
+.crm-audit-table td:first-child{min-width:170px;color:#4a545f;white-space:nowrap}
+.crm-audit-table td:last-child small{display:block;margin-top:4px;color:#606a75;font-size:11px}
+.crm-audit-action{color:#15263c;font-weight:750}
+.crm-audit-card>.crm-report-footnote{padding:16px 12px 0}
+.crm-members-list .crm-invite-actions button{margin:0}
+@media(max-width:1120px){.crm-report-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:820px){.crm-report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.crm-report-lower-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.crm-report-topline{align-items:flex-start;flex-direction:column}.crm-report-export{width:100%;justify-content:space-between}.crm-report-kpis{gap:9px}.crm-report-kpis article{min-height:124px;padding:15px}.crm-report-kpis article>strong{font-size:30px}.crm-report-card{padding:18px}.crm-report-card-head h2{font-size:20px}.crm-report-chart{height:205px;gap:8px;padding-inline:0}.crm-report-bar-group>small{font-size:10px}.crm-audit-card{padding-inline:12px}.crm-audit-table td,.crm-audit-table th{padding-inline:9px}}
+@media(prefers-reduced-motion:reduce){.crm-report-bar-track>span{transition:none}}

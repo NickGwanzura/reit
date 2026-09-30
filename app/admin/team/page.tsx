@@ -14,6 +14,7 @@ export default async function AdminTeamPage() {
 
   const [users, invites] = await Promise.all([
     prisma.user.findMany({
+      where: { role: { in: ["SUPER_ADMIN", "FUND_MANAGER", "RELATIONSHIP_MANAGER"] } },
       select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true },
       orderBy: [{ isActive: "desc" }, { name: "asc" }],
     }),

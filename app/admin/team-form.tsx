@@ -31,11 +31,32 @@ function inviteStatus(invite: TeamInvite) {
 }
 
 export function TeamForm({ initialUsers, initialInvites }: { initialUsers: TeamUser[]; initialInvites: TeamInvite[] }) {
-  const users = initialUsers;
+  const [users, setUsers] = useState(initialUsers);
   const [invites, setInvites] = useState(initialInvites);
   const [message, setMessage] = useState("");
   const [messageIsError, setMessageIsError] = useState(false);
+  const [accessMessage, setAccessMessage] = useState("");
+  const [accessMessageIsError, setAccessMessageIsError] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+
+  async function removeUser(user: TeamUser) {
+    if (!window.confirm(`Remove CRM access for ${user.name}? They will be signed out, but historical lead and audit records will be retained.`)) return;
+    setBusy(user.id);
+    setAccessMessage("");
+    setAccessMessageIsError(false);
+    try {
+      const response = await fetch(`/api/admin/users/${user.id}`, { method: "DELETE" });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Could not remove staff access.");
+      setUsers((current) => current.map((item) => item.id === user.id ? { ...item, isActive: false } : item));
+      setAccessMessage(`CRM access removed for ${user.name}. Historical records remain available.`);
+    } catch (cause) {
+      setAccessMessageIsError(true);
+      setAccessMessage(cause instanceof Error ? cause.message : "Could not remove staff access.");
+    } finally {
+      setBusy(null);
+    }
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -131,7 +152,8 @@ export function TeamForm({ initialUsers, initialInvites }: { initialUsers: TeamU
 
       <section className="crm-team-list crm-members-list" aria-labelledby="team-list-title">
         <div className="crm-team-card-heading"><div><p className="crm-kicker">STAFF DIRECTORY</p><h2 id="team-list-title">CRM accounts</h2></div><span className="crm-team-count">{users.length} accounts</span></div>
-        {users.length ? <div className="crm-team-table-wrap"><table className="crm-team-table"><thead><tr><th scope="col">Staff member</th><th scope="col">Role</th><th scope="col">Access</th><th scope="col">Added</th></tr></thead><tbody>{users.map((user) => <tr key={user.id}><td><strong>{user.name}</strong><a href={`mailto:${user.email}`}>{user.email}</a></td><td>{roleLabel(user.role)}</td><td><span className={`crm-invite-status ${user.isActive ? "accepted" : "revoked"}`}>{user.isActive ? "Active" : "Disabled"}</span></td><td>{formatDate(user.createdAt)}</td></tr>)}</tbody></table></div> : <p className="crm-team-empty">There are no staff accounts yet.</p>}
+        {accessMessage && <p className={`crm-message${accessMessageIsError ? " crm-error" : ""}`} role={accessMessageIsError ? "alert" : "status"}>{accessMessage}</p>}
+        {users.length ? <div className="crm-team-table-wrap"><table className="crm-team-table"><thead><tr><th scope="col">Staff member</th><th scope="col">Role</th><th scope="col">Access</th><th scope="col">Added</th><th scope="col"><span className="sr-only">Actions</span></th></tr></thead><tbody>{users.map((user) => <tr key={user.id}><td><strong>{user.name}</strong><a href={`mailto:${user.email}`}>{user.email}</a></td><td>{roleLabel(user.role)}</td><td><span className={`crm-invite-status ${user.isActive ? "accepted" : "revoked"}`}>{user.isActive ? "Active" : "Access removed"}</span></td><td>{formatDate(user.createdAt)}</td><td className="crm-invite-actions">{user.isActive && ["SUPER_ADMIN", "FUND_MANAGER", "RELATIONSHIP_MANAGER"].includes(user.role) && <button type="button" className="revoke" onClick={() => void removeUser(user)} disabled={busy !== null}>{busy === user.id ? "Removing…" : "Remove access"}</button>}</td></tr>)}</tbody></table></div> : <p className="crm-team-empty">There are no staff accounts yet.</p>}
         <p className="crm-small-print">Staff invitations and account changes are recorded in the CRM audit log. Only fund managers and relationship managers can be invited here; super-admin access remains operator-provisioned.</p>
       </section>
     </div>
