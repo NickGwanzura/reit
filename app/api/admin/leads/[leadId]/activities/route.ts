@@ -23,9 +23,13 @@ export async function POST(request: Request, context: RouteContext<"/api/admin/l
   const { leadId } = await context.params;
 
   try {
-    const lead = await prisma.lead.findFirst({ where: { id: leadId, ...leadWhereFor(staff) }, select: { id: true } });
+    const lead = await prisma.lead.findFirst({ where: { id: leadId, ...leadWhereFor(staff) }, select: { id: true, contact: { select: { doNotContactAt: true } } } });
     if (!lead) return NextResponse.json({ error: "Lead not found." }, { status: 404 });
+    if (lead.contact.doNotContactAt && parsed.data.type !== "NOTE_ADDED") {
+      return NextResponse.json({ error: "This contact has an active do-not-contact flag. Clear it only after documenting valid renewed permission." }, { status: 409 });
+    }
     const activity = await prisma.$transaction(async (tx) => {
+      const now = new Date();
       const row = await tx.activity.create({
         data: { leadId, actorUserId: staff.id, type: parsed.data.type, body: parsed.data.body },
       });
@@ -39,7 +43,14 @@ export async function POST(request: Request, context: RouteContext<"/api/admin/l
           ipHash: hashClientAddress(request),
         },
       });
-      await tx.lead.update({ where: { id: leadId }, data: { updatedAt: new Date() } });
+      const isContact = ["PHONE_CALL", "WHATSAPP_MESSAGE", "EMAIL", "MEETING"].includes(parsed.data.type);
+      if (isContact) {
+        await tx.lead.updateMany({
+          where: { id: leadId, firstContactAt: null },
+          data: { firstContactAt: now },
+        });
+      }
+      await tx.lead.update({ where: { id: leadId }, data: { updatedAt: now, ...(isContact ? { lastContactAt: now } : {}) } });
       return row;
     });
     return NextResponse.json({ id: activity.id, createdAt: activity.createdAt.toISOString() }, { status: 201 });

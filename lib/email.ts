@@ -15,6 +15,7 @@ type LeadEmail = {
   investmentRange: string;
   timeline: string;
   preferredContact: string;
+  doNotContact: boolean;
 };
 
 function escapeHtml(value: string) {
@@ -80,16 +81,15 @@ export async function deliverLeadEmails(lead: LeadEmail) {
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0;background:#f7f8fa;border-left:3px solid #ed1c24"><tr><td style="padding:15px 18px;color:#354052;font-size:13px;line-height:1.65"><strong style="color:#14243d">What happens next</strong><br>The team will follow up to discuss your enquiry and provide relevant information. Please review the official offer documents and risks before making any investment decision.</td></tr></table>
     <p style="margin:0;color:#657083;font-size:12px;line-height:1.6">This acknowledgement does not create an investment, accept an offer or reserve units. If you did not submit this enquiry, you can disregard this email.</p>`;
 
-  const deliveries: Array<Promise<{ kind: "acknowledgement" | "notification"; failed: boolean }>> = [
-    resend.emails.send({
+  const deliveries: Array<Promise<{ kind: "acknowledgement" | "notification"; failed: boolean }>> = [];
+  if (!lead.doNotContact) deliveries.push(resend.emails.send({
       from,
       to: [lead.email],
       replyTo: "info@redwood.co.zw",
       subject: "We received your Mutirikwi REIT enquiry",
       text: `Hello ${safeText(lead.firstName)},\n\nYour investor enquiry has been received. A member of the Mutirikwi REIT team will review your details and contact you using your preferred method.\n\nThis acknowledgement does not create an investment, accept an offer or reserve units.\n\nMutirikwi REIT`,
       html: emailShell(acknowledgementContent, "Your Mutirikwi REIT investor enquiry has been received."),
-    }).then(({ error }) => ({ kind: "acknowledgement" as const, failed: Boolean(error) })),
-  ];
+    }).then(({ error }) => ({ kind: "acknowledgement" as const, failed: Boolean(error) })));
 
   if (recipients.length) {
     const fields: Array<[string, string]> = [
@@ -157,6 +157,47 @@ export async function deliverLeadEmails(lead: LeadEmail) {
   if (results.some((result) => result.status === "rejected" || (result.status === "fulfilled" && result.value.failed))) {
     // Keep recipient addresses and provider payloads out of application logs.
     console.error("A lead email could not be delivered.");
+  }
+}
+
+export async function sendFirstContactReminderEmail(input: {
+  leadId: string;
+  leadName: string;
+  leadEmail: string;
+  assignee?: { name: string; email: string } | null;
+  dueAt: Date;
+}) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+  if (!apiKey || !from) return false;
+  const recipients = input.assignee?.email ? [input.assignee.email] : notificationRecipients();
+  if (!recipients.length) return false;
+
+  const siteUrl = (process.env.AUTH_URL ?? "https://mutirikwireitzim.com").replace(/\/+$/, "");
+  const crmUrl = `${siteUrl}/admin?leadId=${encodeURIComponent(input.leadId)}`;
+  const due = new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Harare" }).format(input.dueAt);
+  const name = escapeHtml(input.leadName);
+  const email = escapeHtml(input.leadEmail);
+  const assigneeGreeting = input.assignee ? `Hello ${escapeHtml(input.assignee.name)},` : "Hello team,";
+  const content = `
+    <p style="margin:0 0 9px;color:#ed1c24;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">First-contact reminder</p>
+    <h1 style="margin:0 0 16px;color:#14243d;font-size:26px;line-height:1.2">A new enquiry needs follow-up.</h1>
+    <p style="margin:0 0 16px;color:#354052;font-size:15px;line-height:1.75">${assigneeGreeting} the first-contact target has passed for a Mutirikwi REIT enquiry. Please review the record and log the next action.</p>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border:1px solid #e6e9ee;border-collapse:collapse"><tr><td style="padding:11px;color:#657083;font-size:12px">Lead</td><td style="padding:11px;color:#17243a;font-size:13px;font-weight:700">${name}</td></tr><tr><td style="padding:11px;color:#657083;font-size:12px">Email</td><td style="padding:11px;color:#17243a;font-size:13px">${email}</td></tr><tr><td style="padding:11px;color:#657083;font-size:12px">Target time</td><td style="padding:11px;color:#17243a;font-size:13px">${escapeHtml(due)} Harare time</td></tr></table>
+    <table role="presentation" cellspacing="0" cellpadding="0" style="margin-top:24px"><tr><td style="background:#ed1c24"><a href="${escapeHtml(crmUrl)}" style="display:inline-block;padding:13px 18px;color:#fff;text-decoration:none;font-size:13px;font-weight:700">Open lead workspace&nbsp; →</a></td></tr></table>
+    <p style="margin:18px 0 0;color:#788294;font-size:11px">This is an internal operational reminder, not an investor communication.</p>`;
+  try {
+    const { error } = await new Resend(apiKey).emails.send({
+      from,
+      to: recipients,
+      replyTo: "info@redwood.co.zw",
+      subject: "Follow-up needed: Mutirikwi REIT enquiry",
+      text: `${input.assignee ? `Hello ${safeText(input.assignee.name)}` : "Hello team"},\n\nThe first-contact target has passed for ${safeText(input.leadName)} (${safeText(input.leadEmail)}). Please review the lead and log the next action. Target: ${due} Harare time.\n\n${crmUrl}`,
+      html: emailShell(content, "An investor enquiry is overdue for first contact."),
+    }, { idempotencyKey: `lead-first-contact-reminder-${input.leadId}` });
+    return !error;
+  } catch {
+    return false;
   }
 }
 

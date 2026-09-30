@@ -40,6 +40,7 @@ export async function captureLead(
       const existing = byEmail ?? byPhone ?? byWhatsapp;
 
       let contactId: string;
+      let contactDoNotContact = false;
       if (existing) {
         const phoneOwner = normalizedPhone
           ? await tx.contact.findUnique({ where: { normalizedPhone } })
@@ -72,6 +73,7 @@ export async function captureLead(
           },
         });
         contactId = contact.id;
+        contactDoNotContact = Boolean(contact.doNotContactAt);
       } else {
         const contact = await tx.contact.create({
           data: {
@@ -91,6 +93,27 @@ export async function captureLead(
       }
 
       const existingLead = await tx.lead.findUnique({ where: { contactId } });
+      const eventTime = new Date();
+      let assignment: { assignedUserId: string | null } = { assignedUserId: existingLead?.assignedUserId ?? null };
+      if (!existingLead) {
+        // Serialize only new-lead assignment so simultaneous enquiries follow one fair rotation.
+        await tx.$queryRaw`SELECT 1::int AS lock_acquired FROM (SELECT pg_advisory_xact_lock(734294001)) AS advisory_lock`;
+        const mostRecentAssignment = await tx.user.aggregate({
+          where: { isActive: true, role: "RELATIONSHIP_MANAGER" },
+          _max: { lastLeadAssignedAt: true },
+        });
+        const nextManager = await tx.user.findFirst({
+          where: { isActive: true, role: "RELATIONSHIP_MANAGER" },
+          orderBy: [{ lastLeadAssignedAt: { sort: "asc", nulls: "first" } }, { createdAt: "asc" }, { id: "asc" }],
+          select: { id: true },
+        });
+        if (nextManager) {
+          assignment = { assignedUserId: nextManager.id };
+          const previousAssignment = mostRecentAssignment._max.lastLeadAssignedAt?.getTime() ?? 0;
+          await tx.user.update({ where: { id: nextManager.id }, data: { lastLeadAssignedAt: new Date(Math.max(eventTime.getTime(), previousAssignment + 1)) } });
+        }
+      }
+
       const lead = existingLead
         ? await tx.lead.update({
             where: { id: existingLead.id },
@@ -109,6 +132,7 @@ export async function captureLead(
               timeline: input.timeline,
               preferredContact: input.preferredContact,
               source: clean(attribution?.utmSource) ?? "website",
+              assignedUserId: assignment.assignedUserId,
             },
           });
 
@@ -136,7 +160,6 @@ export async function captureLead(
         },
       });
 
-      const eventTime = new Date();
       if (!existingLead) {
         await tx.activity.create({
           data: {
@@ -152,6 +175,26 @@ export async function captureLead(
             entityType: "Lead",
             entityId: lead.id,
             newValue: { status: lead.status, source: lead.source },
+            ipHash: options.ipHash,
+            createdAt: eventTime,
+          },
+        });
+      }
+      if (!existingLead && assignment.assignedUserId) {
+        await tx.activity.create({
+          data: {
+            leadId: lead.id,
+            type: "ASSIGNMENT_CHANGED",
+            body: "Lead automatically assigned through the relationship manager rotation.",
+            createdAt: eventTime,
+          },
+        });
+        await tx.auditLog.create({
+          data: {
+            action: "LEAD_AUTO_ASSIGNED",
+            entityType: "Lead",
+            entityId: lead.id,
+            newValue: { assignedUserId: assignment.assignedUserId },
             ipHash: options.ipHash,
             createdAt: eventTime,
           },
@@ -174,6 +217,7 @@ export async function captureLead(
         enquiryId: enquiry.id,
         firstName: input.firstName,
         email,
+        doNotContact: contactDoNotContact,
         repeated: Boolean(existingLead),
       };
     });

@@ -42,6 +42,7 @@ export function AdminFrame({ name, role, children }: { name: string; role: strin
           <a className={pathname === "/admin" ? "active" : ""} href="/admin"><span className="crm-sidebar-icon"><SidebarIcon name="leads" /></span><span>Leads</span></a>
           <a href="/admin#follow-ups"><span className="crm-sidebar-icon"><SidebarIcon name="followups" /></span><span>Follow-ups</span></a>
           <a className={pathname.startsWith("/admin/reports") ? "active" : ""} href="/admin/reports"><span className="crm-sidebar-icon"><SidebarIcon name="reports" /></span><span>Reports</span></a>
+          <a className={pathname.startsWith("/admin/data-quality") ? "active" : ""} href="/admin/data-quality"><span className="crm-sidebar-icon"><SidebarIcon name="settings" /></span><span>Data quality</span></a>
           {isSuperAdmin && <a className={pathname.startsWith("/admin/team") ? "active" : ""} href="/admin/team"><span className="crm-sidebar-icon"><SidebarIcon name="team" /></span><span>Team & invites</span><span className="crm-sidebar-new">ADMIN</span></a>}
           {isSuperAdmin && <a className={pathname.startsWith("/admin/audit") ? "active" : ""} href="/admin/audit"><span className="crm-sidebar-icon"><SidebarIcon name="audit" /></span><span>Audit log</span></a>}
         </nav>

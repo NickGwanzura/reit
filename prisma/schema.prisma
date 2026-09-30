@@ -112,6 +112,7 @@ model User {
   isActive        Boolean  @default(true)
   mustChangePassword Boolean @default(false)
   sessionVersion  Int      @default(0)
+  lastLeadAssignedAt DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -159,6 +160,10 @@ model Contact {
   jobTitle            String?
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
+  doNotContactAt      DateTime?
+  doNotContactReason  String?
+  doNotContactClearedAt DateTime?
+  doNotContactClearReason String?
 
   lead                Lead?
 }
@@ -176,6 +181,11 @@ model Lead {
   updatedAt                DateTime           @updatedAt
   lastSubmissionAt         DateTime            @default(now())
   lastContactAt            DateTime?
+  firstContactAt           DateTime?
+  firstContactReminderSentAt DateTime?
+  firstContactReminderClaimedAt DateTime?
+  retentionReviewAt        DateTime?
+  retentionReviewNote      String?
 
   contact                  Contact            @relation(fields: [contactId], references: [id], onDelete: Restrict)
   assignedUser             User?              @relation("AssignedLeads", fields: [assignedUserId], references: [id], onDelete: SetNull)
@@ -185,6 +195,9 @@ model Lead {
 
   @@index([status, updatedAt])
   @@index([assignedUserId, status])
+  @@index([status, firstContactAt, createdAt])
+  @@index([status, firstContactReminderSentAt, createdAt])
+  @@index([retentionReviewAt])
 }
 
 model Enquiry {

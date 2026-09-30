@@ -3,18 +3,47 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { getStaffUser, leadWhereFor, mayManageAllLeads } from "@/lib/authz";
 import { LeadDashboard, type CrmLead, type CrmTask, type CrmUser } from "@/app/admin/dashboard";
+import { addHarareBusinessMinutes, isFirstContactOverdue } from "@/lib/lead-sla";
+import { LeadStatus } from "@/app/generated/prisma/client";
+import { resolveReportRange } from "@/lib/lead-report-range";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminPage() {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+const single = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] : value;
+
+export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
   const session = await auth();
   if (!session?.user?.id) redirect("/admin/login");
   const staff = await getStaffUser({ allowPasswordChange: true });
   if (!staff) redirect("/admin/login?error=access");
   if (staff.mustChangePassword) redirect("/admin/security?required=1");
 
-  const leadWhere = leadWhereFor(staff);
-  const [leads, statusGroups, tasks, users] = await Promise.all([
+  const params = await searchParams;
+  const requestedLeadIdValue = single(params.leadId);
+  const requestedLeadId = requestedLeadIdValue && requestedLeadIdValue.length <= 40 ? requestedLeadIdValue : undefined;
+  const statusValue = single(params.status);
+  const sourceValue = single(params.source);
+  const status = statusValue && Object.values(LeadStatus).includes(statusValue as LeadStatus) ? statusValue as LeadStatus : undefined;
+  let dateWhere = {};
+  let filterPeriod: string | undefined;
+  const from = single(params.from);
+  const to = single(params.to);
+  if (from || to) {
+    try {
+      const range = resolveReportRange(from, to);
+      dateWhere = { createdAt: { gte: range.start, lt: range.endExclusive } };
+      filterPeriod = `${range.from} to ${range.to}`;
+    } catch {
+      // Invalid drill-down parameters are ignored; the dashboard remains available.
+    }
+  }
+  const sourceFilter = sourceValue !== undefined ? { source: sourceValue || null } : {};
+  const leadWhere = { ...leadWhereFor(staff), ...dateWhere, ...sourceFilter, ...(status ? { status } : {}), ...(requestedLeadId ? { id: requestedLeadId } : {}) };
+  const now = new Date();
+  const slaCutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+  const slaWhere = { ...leadWhereFor(staff), status: "NEW_LEAD" as const, firstContactAt: null, contact: { is: { doNotContactAt: null } } };
+  const [leads, statusGroups, tasks, users, unassignedLeads, unassignedCount, oldSlaCandidates, oldSlaCount, recentSlaCandidates] = await Promise.all([
     prisma.lead.findMany({
       where: leadWhere,
       orderBy: [{ updatedAt: "desc" }],
@@ -43,7 +72,40 @@ export default async function AdminPage() {
           orderBy: { name: "asc" },
         })
       : Promise.resolve([]),
+    mayManageAllLeads(staff)
+      ? prisma.lead.findMany({
+          where: { status: "NEW_LEAD", assignedUserId: null, contact: { is: { doNotContactAt: null } } },
+          orderBy: { createdAt: "asc" },
+          take: 30,
+          select: { id: true, createdAt: true, contact: { select: { firstName: true, lastName: true, email: true, doNotContactAt: true } } },
+        })
+      : Promise.resolve([]),
+    mayManageAllLeads(staff) ? prisma.lead.count({ where: { status: "NEW_LEAD", assignedUserId: null, contact: { is: { doNotContactAt: null } } } }) : Promise.resolve(0),
+    prisma.lead.findMany({
+      where: { ...slaWhere, createdAt: { lt: slaCutoff } },
+      orderBy: { createdAt: "asc" },
+      take: 30,
+      select: { id: true, createdAt: true, assignedUser: { select: { name: true } }, contact: { select: { firstName: true, lastName: true, email: true, doNotContactAt: true } } },
+    }),
+    prisma.lead.count({ where: { ...slaWhere, createdAt: { lt: slaCutoff } } }),
+    prisma.lead.findMany({
+      where: { ...slaWhere, createdAt: { gte: slaCutoff, lt: now } },
+      orderBy: { createdAt: "asc" },
+      select: { id: true, createdAt: true, assignedUser: { select: { name: true } }, contact: { select: { firstName: true, lastName: true, email: true, doNotContactAt: true } } },
+    }),
   ]);
+
+  const overdueRecent = recentSlaCandidates.filter((lead) => isFirstContactOverdue(lead.createdAt, null, now));
+  const overdueLeads = [...oldSlaCandidates, ...overdueRecent]
+    .slice(0, 30)
+    .map((lead) => ({
+      id: lead.id,
+      name: `${lead.contact.firstName} ${lead.contact.lastName}`,
+      email: lead.contact.email,
+      createdAt: lead.createdAt.toISOString(),
+      dueAt: addHarareBusinessMinutes(lead.createdAt).toISOString(),
+      assignedTo: lead.assignedUser?.name ?? null,
+    }));
 
   const serializedLeads: CrmLead[] = leads.map((lead) => ({
     id: lead.id,
@@ -55,6 +117,9 @@ export default async function AdminPage() {
     createdAt: lead.createdAt.toISOString(),
     updatedAt: lead.updatedAt.toISOString(),
     lastSubmissionAt: lead.lastSubmissionAt.toISOString(),
+    firstContactAt: lead.firstContactAt?.toISOString() ?? null,
+    retentionReviewAt: lead.retentionReviewAt?.toISOString() ?? null,
+    retentionReviewNote: lead.retentionReviewNote,
     contact: {
       firstName: lead.contact.firstName,
       lastName: lead.contact.lastName,
@@ -63,6 +128,10 @@ export default async function AdminPage() {
       whatsapp: lead.contact.whatsapp,
       country: lead.contact.country,
       investorType: lead.contact.investorType,
+      doNotContactAt: lead.contact.doNotContactAt?.toISOString() ?? null,
+      doNotContactReason: lead.contact.doNotContactReason,
+      doNotContactClearedAt: lead.contact.doNotContactClearedAt?.toISOString() ?? null,
+      doNotContactClearReason: lead.contact.doNotContactClearReason,
     },
     assignedUser: lead.assignedUser,
     enquiries: lead.enquiries.map((enquiry) => ({
@@ -110,7 +179,11 @@ export default async function AdminPage() {
       leads={serializedLeads}
       tasks={serializedTasks}
       users={serializedUsers}
-      counts={{ total: totalLeads, new: newLeads, qualified, statuses: Object.fromEntries(statusGroups.map((item) => [item.status, item._count._all])) }}
+      unassignedLeads={unassignedLeads.map((lead) => ({ id: lead.id, name: `${lead.contact.firstName} ${lead.contact.lastName}`, email: lead.contact.email, doNotContact: Boolean(lead.contact.doNotContactAt), createdAt: lead.createdAt.toISOString() }))}
+      overdueLeads={overdueLeads}
+      counts={{ total: totalLeads, new: newLeads, qualified, unassigned: unassignedCount, overdue: oldSlaCount + overdueRecent.length, statuses: Object.fromEntries(statusGroups.map((item) => [item.status, item._count._all])) }}
+      initialStatusFilter={status ?? "ALL"}
+      filterSummary={[requestedLeadId ? "Selected lead" : "", status ? `Stage: ${status.replaceAll("_", " ")}` : "", sourceValue !== undefined ? `Source: ${sourceValue || "Not specified"}` : "", filterPeriod ?? ""].filter(Boolean).join(" · ")}
     />
   );
 }
