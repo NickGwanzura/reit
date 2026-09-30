@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
+import { useRef, useState, type FormEvent } from "react";
 
 const navigation = [
   ["Opportunity", "#opportunity"],
@@ -14,6 +15,7 @@ const navigation = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const isHome = usePathname() === "/";
 
   return (
     <>
@@ -22,7 +24,7 @@ export function SiteHeader() {
         <span>SECZ101159S <i aria-hidden="true">•</i> Zimbabwe</span>
       </div>
       <header className="site-header">
-        <Link className="brand brand-logo" href="#home" aria-label="Mutirikwi REIT home">
+        <Link className="brand brand-logo" href={isHome ? "#home" : "/#home"} aria-label="Mutirikwi REIT home">
           <span className="logo-crop">
             <Image src="/assets/mutirikwi-reit-logo.png" alt="" width={1080} height={662} priority />
           </span>
@@ -39,9 +41,10 @@ export function SiteHeader() {
         </button>
         <nav id="primary-nav" className={`primary-nav${open ? " open" : ""}`} aria-label="Main navigation">
           {navigation.map(([label, href]) => (
-            <Link href={href} key={href} onClick={() => setOpen(false)}>{label}</Link>
+            <Link href={isHome ? href : `/${href}`} key={href} onClick={() => setOpen(false)}>{label}</Link>
           ))}
-          <Link className="nav-cta" href="#enquire" onClick={() => setOpen(false)}>Request the pack <span aria-hidden="true">↗</span></Link>
+          <Link className="nav-staff-link" href="/admin/login" onClick={() => setOpen(false)}>Admin login</Link>
+          <Link className="nav-cta" href="/enquire" onClick={() => setOpen(false)}>Request the pack <span aria-hidden="true">↗</span></Link>
         </nav>
       </header>
     </>
@@ -65,7 +68,7 @@ export function InvestmentCalculator() {
         <div><span>ANNUAL DISTRIBUTION <small>at 10% target</small></span><strong>US${money.format(value * 0.1)}</strong></div>
         <div><span>QUARTERLY DISTRIBUTION <small>illustrative</small></span><strong>US${money.format(value * 0.1 / 4)}</strong></div>
       </div>
-      <Link href="#enquire" className="button button-red calc-cta">Start an enquiry <span>↗</span></Link>
+      <Link href="/enquire" className="button button-red calc-cta">Start an enquiry <span>↗</span></Link>
       <small className="calc-legal">Indicative calculation from stated brochure terms only. No offer, advice, ownership confirmation or guarantee.</small>
     </div>
   );
@@ -75,6 +78,16 @@ export function EnquiryForm() {
   const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submittedName, setSubmittedName] = useState("");
+  const [brochureReady, setBrochureReady] = useState(false);
+  const [step, setStep] = useState(0);
+  const formRef = useRef<HTMLFormElement>(null);
+  const stepNames = ["Your details", "Investment profile", "Contact preference"];
+
+  function advanceStep() {
+    if (!formRef.current?.reportValidity()) return;
+    setStep((current) => Math.min(current + 1, stepNames.length - 1));
+    setStatus("");
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,10 +95,24 @@ export function EnquiryForm() {
     setSubmitting(true);
     setStatus("");
     const form = event.currentTarget;
-    const data = new FormData(event.currentTarget);
+    const data = new FormData(form);
     const firstName = String(data.get("firstName") || "").trim();
     const lastName = String(data.get("lastName") || "").trim();
     const tracking = new URLSearchParams(window.location.search);
+    let landingPage = `${window.location.pathname}${window.location.search}`;
+    if (!tracking.has("utm_source") && document.referrer) {
+      try {
+        const referringPage = new URL(document.referrer);
+        if (referringPage.origin === window.location.origin) {
+          for (const [key, value] of referringPage.searchParams) {
+            if (key.startsWith("utm_")) tracking.set(key, value);
+            }
+          landingPage = `${referringPage.pathname}${referringPage.search}`;
+        }
+      } catch {
+        // Ignore malformed referrers; attribution is optional.
+      }
+    }
 
     try {
       const response = await fetch("/api/leads", {
@@ -110,10 +137,11 @@ export function EnquiryForm() {
             utmCampaign: tracking.get("utm_campaign"),
             utmContent: tracking.get("utm_content"),
             utmTerm: tracking.get("utm_term"),
-            landingPage: `${window.location.pathname}${window.location.search}`,
+            landingPage,
           },
         }),
       });
+      const result = await response.json().catch(() => null) as { brochureAccessGranted?: boolean } | null;
 
       if (!response.ok) {
         setStatus(response.status === 429
@@ -122,6 +150,7 @@ export function EnquiryForm() {
         return;
       }
 
+      setBrochureReady(result?.brochureAccessGranted === true);
       setSubmittedName(firstName || "Investor");
       form.reset();
     } catch {
@@ -137,34 +166,67 @@ export function EnquiryForm() {
         <span>ENQUIRY RECEIVED</span>
         <h3>Thank you, {submittedName}.</h3>
         <p>Your investment enquiry has been received. A member of the Mutirikwi REIT team will contact you regarding the next steps.</p>
+        {brochureReady
+          ? <p className="brochure-ready-note">Your brochure is ready to download.</p>
+          : <p className="brochure-ready-note">The brochure is being prepared. Please contact the fund team if you need access.</p>}
         <p className="form-note">Submitting an enquiry does not create an investment or reserve units.</p>
         <div className="confirmation-actions">
-          <a className="button button-red" href="/assets/Masvingo_Flats_Project_Brochure_Abridged.pdf" download>Download brochure <span>↓</span></a>
-          <a className="text-link" href="#development">Explore the development <span>↗</span></a>
+          {brochureReady && <a className="button button-red" href="/api/brochure">Download brochure <span>↓</span></a>}
+          <a className="text-link" href="/#development">Explore the development <span>↗</span></a>
         </div>
       </div>
     );
   }
 
   return (
-    <form className="enquiry-form" onSubmit={handleSubmit}>
-      <div className="form-heading"><span>INVESTOR ENQUIRY</span><span className="form-step">01 / 01</span></div>
-      <div className="form-grid">
-        <label>First name<input name="firstName" autoComplete="given-name" required /></label>
-        <label>Last name<input name="lastName" autoComplete="family-name" required /></label>
-        <label>Email address<input type="email" name="email" autoComplete="email" required /></label>
-        <label>Phone number<input type="tel" name="phone" autoComplete="tel" /></label>
-        <label>WhatsApp number<input type="tel" name="whatsapp" autoComplete="tel" /></label>
-        <label>Country<input name="country" autoComplete="country-name" required /></label>
-        <label>Investor type<select name="investorType" defaultValue="" required><option value="">Select type</option><option value="INDIVIDUAL">Individual</option><option value="DIASPORA">Diaspora</option><option value="CORPORATE">Corporate</option><option value="PENSION_FUND">Pension fund</option><option value="INSURANCE">Insurance</option><option value="BANK">Bank</option><option value="EMPLOYER">Employer</option><option value="OTHER">Other</option></select></label>
-        <label>Approximate intended investment<select name="investment" defaultValue="" required><option value="">Select range</option><option value="RANGE_100_999">US$100–999</option><option value="RANGE_1000_4999">US$1,000–4,999</option><option value="RANGE_5000_9999">US$5,000–9,999</option><option value="RANGE_10000_49999">US$10,000–49,999</option><option value="RANGE_50000_99999">US$50,000–99,999</option><option value="RANGE_100000_PLUS">US$100,000+</option></select></label>
-        <label>Investment timeline<select name="timeline" defaultValue="" required><option value="">Select timeline</option><option value="IMMEDIATELY">Immediately</option><option value="WITHIN_30_DAYS">Within 30 days</option><option value="ONE_TO_THREE_MONTHS">1–3 months</option><option value="THREE_TO_SIX_MONTHS">3–6 months</option><option value="RESEARCHING">Researching</option></select></label>
-        <label className="full">Preferred contact method<select name="preferredContact" defaultValue="" required><option value="">Select preference</option><option value="EMAIL">Email</option><option value="PHONE">Phone</option><option value="WHATSAPP">WhatsApp</option></select></label>
-        <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex={-1} autoComplete="off" /></label>
-        <label className="consent full"><input type="checkbox" name="consent" required /><span>I agree to be contacted about this enquiry. See the <a href="#disclaimer">information notice</a>.</span></label>
+    <form className="enquiry-form enquiry-wizard" ref={formRef} onSubmit={handleSubmit}>
+      <div className="form-heading"><span>INVESTOR ENQUIRY</span><span className="form-step">0{step + 1} / 03</span></div>
+      <ol className="enquiry-progress" aria-label="Enquiry progress">
+        {stepNames.map((name, index) => (
+          <li className={index === step ? "is-current" : index < step ? "is-complete" : ""} aria-current={index === step ? "step" : undefined} key={name}>
+            <span>0{index + 1}</span><span>{name}</span>
+          </li>
+        ))}
+      </ol>
+
+      <fieldset className="step-fields" hidden={step !== 0}>
+        <legend>Your contact details</legend>
+        <div className="form-grid">
+          <label>First name<input name="firstName" autoComplete="given-name" required={step === 0} /></label>
+          <label>Last name<input name="lastName" autoComplete="family-name" required={step === 0} /></label>
+          <label className="full">Email address<input type="email" name="email" autoComplete="email" required={step === 0} /></label>
+          <label>Phone number<input type="tel" name="phone" autoComplete="tel" /></label>
+          <label>WhatsApp number<input type="tel" name="whatsapp" autoComplete="tel" /></label>
+          <label className="full">Country<input name="country" autoComplete="country-name" required={step === 0} /></label>
+        </div>
+      </fieldset>
+
+      <fieldset className="step-fields" hidden={step !== 1}>
+        <legend>Your investment profile</legend>
+        <div className="form-grid">
+          <label className="full">Investor type<select name="investorType" defaultValue="" required={step === 1}><option value="">Select type</option><option value="INDIVIDUAL">Individual</option><option value="DIASPORA">Diaspora</option><option value="CORPORATE">Corporate</option><option value="PENSION_FUND">Pension fund</option><option value="INSURANCE">Insurance</option><option value="BANK">Bank</option><option value="EMPLOYER">Employer</option><option value="OTHER">Other</option></select></label>
+          <label className="full">Approximate intended investment<select name="investment" defaultValue="" required={step === 1}><option value="">Select range</option><option value="RANGE_100_999">US$100–999</option><option value="RANGE_1000_4999">US$1,000–4,999</option><option value="RANGE_5000_9999">US$5,000–9,999</option><option value="RANGE_10000_49999">US$10,000–49,999</option><option value="RANGE_50000_99999">US$50,000–99,999</option><option value="RANGE_100000_PLUS">US$100,000+</option></select></label>
+          <label className="full">Investment timeline<select name="timeline" defaultValue="" required={step === 1}><option value="">Select timeline</option><option value="IMMEDIATELY">Immediately</option><option value="WITHIN_30_DAYS">Within 30 days</option><option value="ONE_TO_THREE_MONTHS">1–3 months</option><option value="THREE_TO_SIX_MONTHS">3–6 months</option><option value="RESEARCHING">Researching</option></select></label>
+        </div>
+      </fieldset>
+
+      <fieldset className="step-fields" hidden={step !== 2}>
+        <legend>How should we contact you?</legend>
+        <div className="form-grid">
+          <label className="full">Preferred contact method<select name="preferredContact" defaultValue="" required={step === 2}><option value="">Select preference</option><option value="EMAIL">Email</option><option value="PHONE">Phone</option><option value="WHATSAPP">WhatsApp</option></select></label>
+          <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex={-1} autoComplete="off" /></label>
+          <label className="consent full"><input type="checkbox" name="consent" required={step === 2} /><span>I agree to be contacted about this enquiry. See the <a href="/#disclaimer">information notice</a>.</span></label>
+        </div>
+        <p className="wizard-assurance">Submitting this enquiry does not create an investment or reserve units.</p>
+      </fieldset>
+
+      <div className="wizard-actions">
+        {step > 0 && <button className="wizard-back" type="button" onClick={() => { setStep((current) => current - 1); setStatus(""); }}>← Back</button>}
+        {step < stepNames.length - 1
+          ? <button className="button button-red wizard-next" type="button" onClick={advanceStep}>Continue <span>→</span></button>
+          : <button className="button button-red wizard-next" type="submit" disabled={submitting}>{submitting ? "Sending securely…" : "Send investor enquiry"} <span>↗</span></button>}
       </div>
-      <button className="button button-red submit-button" type="submit" disabled={submitting}>{submitting ? "Sending securely…" : "Request the investment pack"} <span>↗</span></button>
-      <p className="form-note">Submitting an enquiry does not create an investment or reserve units.</p>
+      <p className="form-note">No payment details are requested. Your enquiry is for follow-up only.</p>
       <div className="form-status" data-state={status ? "error" : "idle"} role="status" aria-live="polite">{status}</div>
     </form>
   );
@@ -174,15 +236,15 @@ export function SiteFooter() {
   return (
     <footer id="disclaimer">
       <div className="wrap footer-top">
-        <Link className="brand brand-logo brand-footer" href="#home" aria-label="Mutirikwi REIT home">
+        <Link className="brand brand-logo brand-footer" href="/#home" aria-label="Mutirikwi REIT home">
           <span className="logo-crop"><Image src="/assets/mutirikwi-reit-logo.png" alt="" width={1080} height={662} /></span>
         </Link>
         <p>Building a path to more affordable homes<br />in Zimbabwe.</p>
-        <Link className="footer-up" href="#home">Back to top ↑</Link>
+        <Link className="footer-up" href="/#home">Back to top ↑</Link>
       </div>
       <div className="wrap footer-bottom">
         <p>For discussion purposes only. This website does not constitute an offer or investment advice. Yield and IRR are targets, not guarantees. Project unit counts, areas and timelines remain subject to tender award and statutory approvals. Renders are artist&apos;s impressions. Please consult the official offer documents and seek independent advice. Enquiry details are stored securely so the REIT team can respond to your request.</p>
-        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><a href="/assets/Masvingo_Flats_Project_Brochure_Abridged.pdf" download>Download brochure ↓</a></div>
+        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><Link href="/enquire">Request brochure ↓</Link><Link href="/admin/login">Admin login</Link><a className="developer-credit" href="https://spiritusglobal.tech/" target="_blank" rel="noopener noreferrer" aria-label="Website developed by Spiritus, opens in a new tab">Website by <strong>SPIRITUS</strong><span aria-hidden="true">↗</span></a></div>
       </div>
     </footer>
   );

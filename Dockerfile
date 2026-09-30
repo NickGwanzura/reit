@@ -22,6 +22,7 @@ ENV NODE_ENV=production \
     HOSTNAME=0.0.0.0
 
 COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/private-assets ./private-assets
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/node_modules ./node_modules

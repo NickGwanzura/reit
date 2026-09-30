@@ -4,6 +4,11 @@ import { deliverLeadEmails } from "@/lib/email";
 import { consumeLeadRateLimit, hashClientAddress } from "@/lib/rate-limit";
 import { leadSubmissionSchema } from "@/lib/validation/lead";
 import { readJsonBody } from "@/lib/api-security";
+import {
+  BROCHURE_ACCESS_COOKIE,
+  BROCHURE_ACCESS_TTL_SECONDS,
+  createBrochureAccessToken,
+} from "@/lib/brochure-access";
 
 export const runtime = "nodejs";
 
@@ -70,7 +75,24 @@ export async function POST(request: Request) {
       console.error("Lead was stored, but email delivery did not complete.");
     }
 
-    return NextResponse.json({ received: true, firstName: lead.firstName }, { status: 201 });
+    const brochureToken = createBrochureAccessToken();
+    const response = NextResponse.json(
+      { received: true, firstName: lead.firstName, brochureAccessGranted: Boolean(brochureToken) },
+      { status: 201 },
+    );
+
+    if (brochureToken) {
+      response.cookies.set(BROCHURE_ACCESS_COOKIE, brochureToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/api/brochure",
+        maxAge: BROCHURE_ACCESS_TTL_SECONDS,
+        priority: "high",
+      });
+    }
+
+    return response;
   } catch {
     console.error("Lead submission could not be saved.");
     return NextResponse.json(
