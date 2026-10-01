@@ -30,14 +30,14 @@ export default function HomePage() {
       <SiteHeader />
       <main id="main">
         <section className="hero" id="home">
-          <div className="hero-art" aria-hidden="true"><Image src="/assets/lake-mutirikwi.jpg" alt="" fill priority sizes="100vw" /></div>
+          <div className="hero-art" aria-hidden="true"><Image src="/assets/lake-mutirikwi-hero.jpg" alt="" fill priority sizes="100vw" /></div>
           <div className="hero-shade" />
           <div className="hero-content wrap">
             <p className="eyebrow light"><span /> INVESTING IN THE FUTURE, TODAY</p>
-            <h1>Unlocking real estate value<br /><em>in the Masvingo region.</em></h1>
+            <h1>Unlocking real estate value <em>in the Masvingo region.</em></h1>
             <p className="hero-lede">A SECZ-licensed REIT focused on commercial property opportunities, target USD income and long-term capital appreciation.</p>
             <div className="hero-actions"><Link className="button button-red" href="#opportunity">Explore the opportunity <span>↗</span></Link><Link className="button button-ghost" href="/enquire">Request the fact sheet <span>↘</span></Link></div>
-            <p className="hero-caption"><span className="caption-rule" /> LAKE MUTIRIKWI <span>·</span> MASVINGO, ZIMBABWE</p>
+            <p className="hero-caption"><span className="caption-rule" /> LAKE MUTIRIKWI <span>·</span> ILLUSTRATIVE IMAGE</p>
           </div>
         </section>
 
@@ -63,7 +63,7 @@ export default function HomePage() {
         <section className="section development" id="development">
           <div className="wrap development-head"><div><p className="eyebrow light"><span /> INVESTMENT STRATEGY</p><h2>Investing in property.<br /><em>Backing regional growth.</em></h2></div><p className="development-copy">The REIT seeks to develop, own, manage and invest in real estate across the Masvingo region. The fact sheet identifies commercial opportunities including offices, retail, hospitality and industrial property, with projects such as the new Masvingo CBD.</p></div>
           <div className="wrap project-feature">
-            <div className="project-visual"><Image src="/assets/lake-mutirikwi.jpg" alt="Lake Mutirikwi in the Masvingo region" fill sizes="(max-width: 720px) 100vw, 65vw" /><span className="image-tag">MASVINGO REGION</span><div className="visual-label"><span>INVESTMENT FOCUS</span><strong>Commercial<br />Real Estate</strong></div></div>
+            <div className="project-visual"><Image src="/assets/lake-mutirikwi-hero.jpg" alt="AI-generated illustrative landscape inspired by Lake Mutirikwi" fill sizes="(max-width: 720px) 100vw, 65vw" /><span className="image-tag">ILLUSTRATIVE IMAGE</span><div className="visual-label"><span>INVESTMENT FOCUS</span><strong>Commercial<br />Real Estate</strong></div></div>
             <div className="project-facts"><div className="fact-main"><span>STRATEGY</span><strong>4</strong><p>commercial property sectors identified in the fact sheet</p></div><div className="fact-grid"><div><strong>Office</strong><span>spaces</span></div><div><strong>Retail</strong><span>centres</span></div><div><strong>Hospitality</strong><span>property</span></div><div><strong>Industrial</strong><span>property</span></div></div><p className="timeline-note"><span className="timeline-icon">↗</span><span><strong>Develop · Own · Manage · Invest</strong><br />A long-term real estate strategy focused on the Masvingo region.</span></p></div>
           </div>
           <div className="wrap amenities"><div className="amenity"><span className="amenity-icon">01</span><strong>Diversification</strong><small>Exposure to real estate without direct property ownership</small></div><div className="amenity"><span className="amenity-icon">02</span><strong>Liquidity</strong><small>Units are intended to be tradable after listing</small></div><div className="amenity"><span className="amenity-icon">03</span><strong>Inflation Hedge</strong><small>Real estate assets have historically preserved value in inflationary environments</small></div><div className="amenity"><span className="amenity-icon">04</span><strong>Regional Impact</strong><small>Contribute to regional development and job creation</small></div></div>

@@ -1626,6 +1626,31 @@ textarea {
   }
 }
 
+/* Keep the hero headline balanced instead of isolating a single word. */
+.hero h1 {
+  max-width: 900px;
+  text-wrap: balance;
+}
+
+/* The step numbers are already rendered as spans, so suppress native list markers. */
+.enquiry-start-card ol {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 0;
+}
+
+.enquiry-start-card ol li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+}
+
 /* Fact-sheet-aligned contact directory and three-partner layout. */
 .contact-lines {
   gap: 20px;

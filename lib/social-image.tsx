@@ -8,7 +8,7 @@ export const socialImageAlt =
 
 const [logoFile, lakeFile] = await Promise.all([
   readFile(join(process.cwd(), "public", "assets", "mutirikwi-reit-logo.png")),
-  readFile(join(process.cwd(), "public", "assets", "lake-mutirikwi.jpg")),
+  readFile(join(process.cwd(), "public", "assets", "lake-mutirikwi-hero.jpg")),
 ]);
 
 const logoSource = `data:image/png;base64,${logoFile.toString("base64")}`;
