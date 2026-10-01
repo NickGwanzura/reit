@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 const brochurePath = join(
   process.cwd(),
   "private-assets",
-  "Masvingo_Flats_Project_Brochure_Abridged.pdf",
+  "Mutirikwi_REIT_Fact_Sheet_Oct_2026.pdf",
 );
 
 function privateHeaders(contentType = "text/plain; charset=utf-8") {
@@ -21,7 +21,7 @@ function privateHeaders(contentType = "text/plain; charset=utf-8") {
 
 export async function GET(request: Request) {
   if (!hasBrochureAccess(request.headers.get("cookie"))) {
-    return new Response("Submit the investor enquiry form to access the brochure.", {
+    return new Response("Submit the investor enquiry form to access the fact sheet.", {
       status: 401,
       headers: privateHeaders(),
     });
@@ -33,13 +33,13 @@ export async function GET(request: Request) {
     return new Response(body, {
       headers: {
         ...privateHeaders("application/pdf"),
-        "Content-Disposition": 'attachment; filename="Masvingo_Flats_Project_Brochure_Abridged.pdf"',
+        "Content-Disposition": 'attachment; filename="Mutirikwi_REIT_Fact_Sheet_Oct_2026.pdf"',
         "Content-Length": String(body.byteLength),
       },
     });
   } catch {
-    console.error("The private investor brochure could not be read.");
-    return new Response("The brochure is temporarily unavailable.", {
+    console.error("The private investor fact sheet could not be read.");
+    return new Response("The fact sheet is temporarily unavailable.", {
       status: 503,
       headers: privateHeaders(),
     });

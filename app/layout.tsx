@@ -31,19 +31,19 @@ const sourceSerif4 = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Mutirikwi REIT | Masvingo Flats Project",
+  title: "Mutirikwi REIT | Commercial Real Estate in Masvingo",
   description:
-    "Discover Mutirikwi REIT's proposed Masvingo Flats Project: 180 affordable homes in Zimbabwe. Explore the project, review investment terms and risks, and request the investor brochure.",
+    "Explore Mutirikwi REIT's commercial real estate strategy in the Masvingo region. Review October 2026 investment terms, target returns and risks, and request the fact sheet.",
   metadataBase: new URL("https://mutirikwireitzim.com"),
   alternates: {
     canonical: "/",
   },
   keywords: [
     "Mutirikwi REIT",
-    "Masvingo Flats Project",
-    "affordable housing Zimbabwe",
+    "commercial real estate Zimbabwe",
+    "Masvingo property investment",
+    "SECZ licensed REIT",
     "Zimbabwe real estate investment trust",
-    "Masvingo housing development",
   ],
   creator: "Mutirikwi REIT",
   publisher: "Mutirikwi REIT",
@@ -61,8 +61,8 @@ export const metadata: Metadata = {
   },
   applicationName: "Mutirikwi REIT",
   openGraph: {
-    title: "Mutirikwi REIT | Affordable Homes in Masvingo",
-    description: "A proposed 180-home community in Masvingo, Zimbabwe. Explore the Mutirikwi REIT project, published terms and key risks.",
+    title: "Mutirikwi REIT | Commercial Property in Masvingo",
+    description: "A SECZ-licensed REIT focused on commercial property opportunities in the Masvingo region. Review target terms and risks.",
     url: "/",
     siteName: "Mutirikwi REIT",
     type: "website",
@@ -70,8 +70,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mutirikwi REIT | Affordable Homes in Masvingo",
-    description: "Explore a proposed 180-home community in Masvingo, Zimbabwe, and review the project, terms and risks.",
+    title: "Mutirikwi REIT | Commercial Property in Masvingo",
+    description: "Explore commercial real estate opportunities in the Masvingo region and review Mutirikwi REIT terms and risks.",
   },
 };
 

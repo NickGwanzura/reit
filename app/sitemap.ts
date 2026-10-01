@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://mutirikwireitzim.com/",
       changeFrequency: "monthly",
       priority: 1,
-      images: ["https://mutirikwireitzim.com/assets/masvingo-flats-hero-high-res.png"],
+      images: ["https://mutirikwireitzim.com/assets/lake-mutirikwi.jpg"],
     },
   ];
 }

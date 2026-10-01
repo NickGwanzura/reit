@@ -1626,6 +1626,37 @@ textarea {
   }
 }
 
+/* Fact-sheet-aligned contact directory and three-partner layout. */
+.contact-lines {
+  gap: 20px;
+}
+
+.contact-item {
+  padding-top: 14px;
+  border-top: 1px solid #d3dbd4;
+}
+
+.contact-item > p {
+  margin: 0 0 5px;
+  color: #536568;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.partner-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.registration-card {
+  grid-column: span 2;
+}
+
+@media (max-width: 950px) {
+  .registration-card {
+    grid-column: auto;
+  }
+}
+
 /* Dedicated, accessible three-step investor enquiry */
 .enquiry-page {
   min-height: 70vh;

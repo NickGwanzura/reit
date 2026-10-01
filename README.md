@@ -32,4 +32,4 @@ This release collects and manages enquiries only. It does not take payments, sub
 
 ## Site content
 
-Public investment and development facts are based on the supplied project brochure. Project renders are labelled as artist’s impressions. The public calculator is illustrative and does not initiate an investment, payment, reservation, or unit allocation.
+Public investment facts are based on the Mutirikwi REIT Fact Sheet, October 2026. The public unit estimator only translates an entered amount at the published launch price; it does not project returns or initiate an investment, payment, reservation, or unit allocation. The gated `/api/brochure` endpoint serves the October 2026 fact sheet after a valid enquiry.

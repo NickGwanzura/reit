@@ -7,9 +7,9 @@ import { useRef, useState, type FormEvent } from "react";
 
 const navigation = [
   ["Opportunity", "#opportunity"],
-  ["Development", "#development"],
+  ["Strategy", "#development"],
   ["How it works", "#how-it-works"],
-  ["Investment", "#terms"],
+  ["Terms", "#terms"],
   ["Risk & governance", "#risks"],
 ];
 
@@ -20,7 +20,7 @@ export function SiteHeader() {
   return (
     <>
       <div className="topline">
-        <span>Collective Investment Scheme registered with SECZ</span>
+        <span>SECZ-Licensed Collective Investment Scheme</span>
         <span>SECZ101159S <i aria-hidden="true">•</i> Zimbabwe</span>
       </div>
       <header className="site-header">
@@ -44,7 +44,7 @@ export function SiteHeader() {
             <Link href={isHome ? href : `/${href}`} key={href} onClick={() => setOpen(false)}>{label}</Link>
           ))}
           <Link className="nav-staff-link" href="/admin/login" onClick={() => setOpen(false)}>Admin login</Link>
-          <Link className="nav-cta" href="/enquire" onClick={() => setOpen(false)}>Request the pack <span aria-hidden="true">↗</span></Link>
+          <Link className="nav-cta" href="/enquire" onClick={() => setOpen(false)}>Request fact sheet <span aria-hidden="true">↗</span></Link>
         </nav>
       </header>
     </>
@@ -59,17 +59,16 @@ export function InvestmentCalculator() {
 
   return (
     <div className="calculator">
-      <div className="calc-top"><span>ILLUSTRATIVE CALCULATOR</span><span className="calc-icon" aria-hidden="true">⌗</span></div>
-      <label htmlFor="amount">Intended investment amount</label>
+      <div className="calc-top"><span>ILLUSTRATIVE UNIT ESTIMATE</span><span className="calc-icon" aria-hidden="true">⌗</span></div>
+      <label htmlFor="amount">Amount to compare with launch price</label>
       <div className="amount-input"><span>US$</span><input id="amount" type="number" min="100" step="100" value={amount} onChange={(event) => setAmount(event.target.value)} inputMode="decimal" aria-describedby="minimum-note" /></div>
-      <p className="input-note" id="minimum-note">Minimum investment: US$100</p>
+      <p className="input-note" id="minimum-note">Pre-listing minimum: 1,000 units (US$100)</p>
       <div className="calc-results" aria-live="polite">
-        <div><span>ILLUSTRATIVE UNITS</span><strong>{money.format(value / 0.1)}</strong></div>
-        <div><span>ANNUAL DISTRIBUTION <small>at 10% target</small></span><strong>US${money.format(value * 0.1)}</strong></div>
-        <div><span>QUARTERLY DISTRIBUTION <small>illustrative</small></span><strong>US${money.format(value * 0.1 / 4)}</strong></div>
+        <div><span>ILLUSTRATIVE UNITS AT US$0.10 EACH</span><strong>{money.format(value / 0.1)}</strong></div>
+        <div><span>PRE-LISTING MINIMUM</span><strong>1,000 units</strong></div>
       </div>
-      <Link href="/enquire" className="button button-red calc-cta">Start an enquiry <span>↗</span></Link>
-      <small className="calc-legal">Indicative calculation from stated brochure terms only. No offer, advice, ownership confirmation or guarantee.</small>
+      <Link href="/enquire" className="button button-red calc-cta">Request the fact sheet <span>↗</span></Link>
+      <small className="calc-legal">Illustrative arithmetic only. It is not a subscription, allocation, offer or investment advice.</small>
     </div>
   );
 }
@@ -167,12 +166,12 @@ export function EnquiryForm() {
         <h3>Thank you, {submittedName}.</h3>
         <p>Your investment enquiry has been received. A member of the Mutirikwi REIT team will contact you regarding the next steps.</p>
         {brochureReady
-          ? <p className="brochure-ready-note">Your brochure is ready to download.</p>
-          : <p className="brochure-ready-note">The brochure is being prepared. Please contact the fund team if you need access.</p>}
+          ? <p className="brochure-ready-note">The October 2026 fact sheet is ready to download.</p>
+          : <p className="brochure-ready-note">The fact sheet is being prepared. Please contact the fund team if you need access.</p>}
         <p className="form-note">Submitting an enquiry does not create an investment or reserve units.</p>
         <div className="confirmation-actions">
-          {brochureReady && <a className="button button-red" href="/api/brochure">Download brochure <span>↓</span></a>}
-          <a className="text-link" href="/#development">Explore the development <span>↗</span></a>
+          {brochureReady && <a className="button button-red" href="/api/brochure">Download fact sheet <span>↓</span></a>}
+          <a className="text-link" href="/#development">Explore the investment strategy <span>↗</span></a>
         </div>
       </div>
     );
@@ -239,12 +238,12 @@ export function SiteFooter() {
         <Link className="brand brand-logo brand-footer" href="/#home" aria-label="Mutirikwi REIT home">
           <span className="logo-crop"><Image src="/assets/mutirikwi-reit-logo.png" alt="" width={1080} height={662} /></span>
         </Link>
-        <p>Building a path to more affordable homes<br />in Zimbabwe.</p>
+        <p>Unlocking real estate value<br />in the Masvingo region.</p>
         <Link className="footer-up" href="/#home">Back to top ↑</Link>
       </div>
       <div className="wrap footer-bottom">
-        <p>For discussion purposes only. This website does not constitute an offer or investment advice. Yield and IRR are targets, not guarantees. Project unit counts, areas and timelines remain subject to tender award and statutory approvals. Renders are artist&apos;s impressions. Please consult the official offer documents and seek independent advice. Enquiry details are stored securely so the REIT team can respond to your request.</p>
-        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><Link href="/enquire">Request brochure ↓</Link><Link href="/admin/login">Admin login</Link><a className="developer-credit" href="https://spiritusglobal.tech/" target="_blank" rel="noopener noreferrer" aria-label="Website developed by Spiritus, opens in a new tab">Website by <strong>SPIRITUS</strong><span aria-hidden="true">↗</span></a></div>
+        <p>For information only. This website does not constitute an offer or investment advice. The 17% property-development IRR and 10% p.a. USD net income yield on NAV are targets, not guarantees. Unit transfers are subject to the pre-listing lock-in and applicable laws. Please consult the official offer documents and seek independent advice. The enquiry form does not accept payments, subscribe for units or reserve an allocation. Enquiry details are stored securely so the REIT team can respond to your request.</p>
+        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><Link href="/enquire">Request fact sheet ↓</Link><Link href="/admin/login">Admin login</Link><a className="developer-credit" href="https://spiritusglobal.tech/" target="_blank" rel="noopener noreferrer" aria-label="Website developed by Spiritus, opens in a new tab">Website by <strong>SPIRITUS</strong><span aria-hidden="true">↗</span></a></div>
       </div>
     </footer>
   );

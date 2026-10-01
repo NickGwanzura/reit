@@ -4,15 +4,15 @@ import { ImageResponse } from "next/og";
 
 export const socialImageSize = { width: 1200, height: 630 };
 export const socialImageAlt =
-  "Mutirikwi REIT — proposed affordable homes in Masvingo, Zimbabwe";
+  "Mutirikwi REIT — commercial real estate opportunities in the Masvingo region";
 
-const [logoFile, developmentFile] = await Promise.all([
+const [logoFile, lakeFile] = await Promise.all([
   readFile(join(process.cwd(), "public", "assets", "mutirikwi-reit-logo.png")),
-  readFile(join(process.cwd(), "public", "assets", "masvingo-flats-hero-high-res.png")),
+  readFile(join(process.cwd(), "public", "assets", "lake-mutirikwi.jpg")),
 ]);
 
 const logoSource = `data:image/png;base64,${logoFile.toString("base64")}`;
-const developmentSource = `data:image/png;base64,${developmentFile.toString("base64")}`;
+const lakeSource = `data:image/jpeg;base64,${lakeFile.toString("base64")}`;
 
 export function createSocialImage() {
   return new ImageResponse(
@@ -30,7 +30,7 @@ export function createSocialImage() {
         }}
       >
         <img
-          src={developmentSource}
+          src={lakeSource}
           style={{
             position: "absolute",
             top: 0,
@@ -96,7 +96,7 @@ export function createSocialImage() {
           }}
         >
           <span style={{ width: 32, height: 2, background: "#ed1c24" }} />
-          MASVINGO, ZIMBABWE
+          MASVINGO REGION
         </div>
         <div
           style={{
@@ -111,8 +111,8 @@ export function createSocialImage() {
             letterSpacing: -1.4,
           }}
         >
-          <span>Invest in homes.</span>
-          <span style={{ color: "#f1d8d5" }}>Build lasting value.</span>
+          <span>Unlocking real estate</span>
+          <span style={{ color: "#f1d8d5" }}>value in Masvingo.</span>
         </div>
         <div
           style={{
@@ -125,7 +125,7 @@ export function createSocialImage() {
             letterSpacing: 0.2,
           }}
         >
-          A proposed affordable housing community
+          SECZ-LICENSED REIT · COMMERCIAL PROPERTY
         </div>
         <div
           style={{
@@ -141,9 +141,9 @@ export function createSocialImage() {
             background: "rgba(13, 29, 49, .94)",
           }}
         >
-          <span style={{ fontSize: 42, fontWeight: 700, lineHeight: 1 }}>180</span>
+          <span style={{ fontSize: 42, fontWeight: 700, lineHeight: 1 }}>17%</span>
           <span style={{ color: "#e5e9ed", fontSize: 15, lineHeight: 1.35 }}>
-            PROPOSED<br />HOMES
+            TARGET IRR ON<br />PROPERTY DEVELOPMENTS
           </span>
         </div>
       </div>
