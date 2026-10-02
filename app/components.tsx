@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 const navigation = [
   ["Opportunity", "#opportunity"],
@@ -214,7 +214,7 @@ export function EnquiryForm() {
         <div className="form-grid">
           <label className="full">Preferred contact method<select name="preferredContact" defaultValue="" required={step === 2}><option value="">Select preference</option><option value="EMAIL">Email</option><option value="PHONE">Phone</option><option value="WHATSAPP">WhatsApp</option></select></label>
           <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex={-1} autoComplete="off" /></label>
-          <label className="consent full"><input type="checkbox" name="consent" required={step === 2} /><span>I agree to be contacted about this enquiry. See the <a href="/#disclaimer">information notice</a>.</span></label>
+          <label className="consent full"><input type="checkbox" name="consent" required={step === 2} /><span>I agree to be contacted about this enquiry. See the <a href="/privacy">privacy policy</a>.</span></label>
         </div>
         <p className="wizard-assurance">Submitting this enquiry does not create an investment or reserve units.</p>
       </fieldset>
@@ -243,8 +243,38 @@ export function SiteFooter() {
       </div>
       <div className="wrap footer-bottom">
         <p>For information only. This website does not constitute an offer or investment advice. The 17% property-development IRR and 10% p.a. USD net income yield on NAV are targets, not guarantees. Unit transfers are subject to the pre-listing lock-in and applicable laws. Please consult the official offer documents and seek independent advice. The enquiry form does not accept payments, subscribe for units or reserve an allocation. Enquiry details are stored securely so the REIT team can respond to your request.</p>
-        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><Link href="/enquire">Request fact sheet ↓</Link><Link href="/admin/login">Admin login</Link><a className="developer-credit" href="https://spiritusglobal.tech/" target="_blank" rel="noopener noreferrer" aria-label="Website developed by Spiritus, opens in a new tab">Website by <strong>SPIRITUS</strong><span aria-hidden="true">↗</span></a></div>
+        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><Link href="/enquire">Request fact sheet ↓</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/cookies">Cookies</Link><Link href="/admin/login">Admin login</Link><a className="developer-credit" href="https://spiritusglobal.tech/" target="_blank" rel="noopener noreferrer" aria-label="Website developed by Spiritus, opens in a new tab">Website by <strong>SPIRITUS</strong><span aria-hidden="true">↗</span></a></div>
       </div>
     </footer>
+  );
+}
+
+export function CookieNotice() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    try {
+      setVisible(window.sessionStorage.getItem("mutirikwi-cookie-notice") !== "dismissed");
+    } catch {
+      setVisible(true);
+    }
+  }, []);
+
+  function dismissNotice() {
+    try {
+      window.sessionStorage.setItem("mutirikwi-cookie-notice", "dismissed");
+    } catch {
+      // Keep the notice dismissible even when browser storage is unavailable.
+    }
+    setVisible(false);
+  }
+
+  if (!visible) return null;
+
+  return (
+    <aside className="cookie-notice" aria-label="Cookie notice" role="region">
+      <p><strong>Essential cookies only.</strong> We use them for secure staff sign-in and to provide a fact sheet you request. We do not currently use analytics or advertising cookies. <Link href="/cookies">Cookie policy</Link></p>
+      <button type="button" onClick={dismissNotice} aria-label="Dismiss cookie notice">Got it</button>
+    </aside>
   );
 }

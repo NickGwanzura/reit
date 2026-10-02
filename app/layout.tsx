@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import localFont from "next/font/local";
+import { CookieNotice } from "./components";
 
 const inter = localFont({
   src: "./fonts/InterVariable.woff2",
@@ -85,7 +86,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <link rel="stylesheet" href="/visual-refinement.css" />
         <link rel="stylesheet" href="/crm.css" />
       </head>
-      <body>{children}</body>
+      <body>{children}<CookieNotice /></body>
     </html>
   );
 }

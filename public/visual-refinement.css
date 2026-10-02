@@ -1626,6 +1626,270 @@ textarea {
   }
 }
 
+/* Public legal pages */
+.legal-page {
+  min-height: 65vh;
+  padding: clamp(48px, 7vw, 92px) 0 clamp(64px, 8vw, 110px);
+  background: #fff;
+  color: #111;
+}
+
+.legal-wrap {
+  max-width: 940px;
+}
+
+.legal-heading {
+  padding-bottom: 34px;
+  border-bottom: 1px solid #dfe4e5;
+}
+
+.legal-heading .eyebrow {
+  color: #384d56;
+}
+
+.legal-heading h1 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--display);
+  font-size: clamp(42px, 6vw, 64px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -.045em;
+}
+
+.legal-summary {
+  max-width: 700px;
+  margin: 18px 0 12px;
+  color: #344955;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.legal-updated {
+  margin: 0;
+  color: #53616a;
+  font-size: 13px;
+}
+
+.legal-policy-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 22px 0 36px;
+  border-bottom: 1px solid #e2e6e7;
+}
+
+.legal-policy-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 13px;
+  border: 1px solid #d6dcde;
+  color: #162a35;
+  font-size: 14px;
+  font-weight: 650;
+  transition: border-color .18s ease, color .18s ease, background .18s ease;
+}
+
+.legal-policy-nav a:hover,
+.legal-policy-nav a:focus-visible {
+  border-color: var(--button-red);
+  color: #a9212c;
+  background: #fffafa;
+}
+
+.legal-policy-nav a span {
+  color: var(--button-red);
+}
+
+.legal-copy {
+  max-width: 780px;
+  padding-top: 10px;
+}
+
+.legal-copy section {
+  margin: 30px 0;
+}
+
+.legal-copy h2 {
+  margin: 0 0 10px;
+  color: #172a36;
+  font-family: var(--display);
+  font-size: 23px;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+}
+
+.legal-copy h3 {
+  margin: 0 0 7px;
+  color: #172a36;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.legal-copy p,
+.legal-copy li {
+  color: #26363d;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.legal-copy p {
+  margin: 0 0 13px;
+}
+
+.legal-copy ul {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 16px;
+  padding-left: 23px;
+}
+
+.legal-copy a {
+  color: #a4242d;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.legal-copy a:hover,
+.legal-copy a:focus-visible {
+  color: #761821;
+}
+
+.legal-copy code {
+  padding: 2px 5px;
+  border: 1px solid #e0e4e7;
+  background: #f4f6f7;
+  color: #152c39;
+  font-size: .9em;
+}
+
+.cookie-detail {
+  margin: 13px 0;
+  padding: 17px 19px;
+  border: 1px solid #e0e5e6;
+  border-left: 3px solid var(--button-red);
+  background: #fafbfb;
+}
+
+.cookie-detail p {
+  margin-bottom: 0;
+}
+
+.legal-review-note {
+  max-width: 780px;
+  margin: 38px 0 0;
+  padding: 15px 18px;
+  border-left: 3px solid var(--button-red);
+  background: #f4f6f7;
+  color: #344955;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.cookie-notice {
+  position: fixed;
+  z-index: 100;
+  right: 24px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: min(760px, calc(100vw - 48px));
+  padding: 17px 19px;
+  border: 1px solid rgba(255, 255, 255, .26);
+  border-left: 3px solid var(--button-red);
+  background: #14243d;
+  box-shadow: 0 14px 40px rgba(9, 23, 41, .24);
+  color: #fff;
+}
+
+.cookie-notice p {
+  flex: 1;
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cookie-notice p strong {
+  color: #fff;
+}
+
+.cookie-notice a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cookie-notice button {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, .52);
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cookie-notice button:hover,
+.cookie-notice button:focus-visible {
+  background: #fff;
+  color: #14243d;
+}
+
+@media (max-width: 720px) {
+  .legal-page {
+    padding: 45px 0 64px;
+  }
+
+  .legal-summary {
+    font-size: 16px;
+  }
+
+  .legal-policy-nav {
+    gap: 7px;
+    padding: 18px 0 26px;
+  }
+
+  .legal-policy-nav a {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .legal-copy section {
+    margin: 25px 0;
+  }
+
+  .legal-copy h2 {
+    font-size: 20px;
+  }
+
+  .legal-copy p,
+  .legal-copy li {
+    font-size: 15px;
+  }
+
+  .cookie-notice {
+    right: 12px;
+    bottom: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: calc(100vw - 24px);
+    padding: 15px;
+  }
+
+  .cookie-notice p {
+    font-size: 14px;
+  }
+}
+
 /* Keep the hero headline balanced instead of isolating a single word. */
 .hero h1 {
   max-width: 900px;

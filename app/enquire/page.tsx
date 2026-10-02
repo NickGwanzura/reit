@@ -31,7 +31,7 @@ export default function EnquiryPage() {
                 <li key={number}><span>{number}</span><div><strong>{title}</strong><small>{description}</small></div></li>
               ))}
             </ol>
-            <div className="enquiry-privacy-note"><span aria-hidden="true">◇</span><p>Your details are used to respond to this enquiry. No payment details are requested, and submitting this form does not reserve units or create an investment.</p></div>
+            <div className="enquiry-privacy-note"><span aria-hidden="true">◇</span><p>Your details are used to respond to this enquiry. No payment details are requested, and submitting this form does not reserve units or create an investment. Read the <Link href="/privacy">privacy policy</Link>.</p></div>
             <div className="enquiry-page-contact"><span className="micro-label">PREFER TO SPEAK WITH THE TEAM?</span><a href="mailto:makanatsa@redwood.co.zw">makanatsa@redwood.co.zw <span aria-hidden="true">↗</span></a><a href="mailto:farai@redwood.co.zw">farai@redwood.co.zw <span aria-hidden="true">↗</span></a><a href="tel:+263773590809">+263 773 590 809 <span aria-hidden="true">↗</span></a><a href="tel:+263779888456">+263 779 888 456 <span aria-hidden="true">↗</span></a></div>
           </div>
           <EnquiryForm />
