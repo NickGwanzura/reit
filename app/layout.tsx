@@ -85,6 +85,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <link rel="stylesheet" href="/next-overrides.css" />
         <link rel="stylesheet" href="/visual-refinement.css" />
         <link rel="stylesheet" href="/crm.css" />
+        <link rel="stylesheet" href="/articles.css" />
       </head>
       <body>{children}<CookieNotice /></body>
     </html>

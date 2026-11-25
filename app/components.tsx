@@ -11,6 +11,7 @@ const navigation = [
   ["How it works", "#how-it-works"],
   ["Terms", "#terms"],
   ["Risk & governance", "#risks"],
+  ["Insights", "/articles"],
 ];
 
 export function SiteHeader() {
@@ -41,7 +42,7 @@ export function SiteHeader() {
         </button>
         <nav id="primary-nav" className={`primary-nav${open ? " open" : ""}`} aria-label="Main navigation">
           {navigation.map(([label, href]) => (
-            <Link href={isHome ? href : `/${href}`} key={href} onClick={() => setOpen(false)}>{label}</Link>
+            <Link href={href.startsWith("/") ? href : isHome ? href : `/${href}`} key={href} onClick={() => setOpen(false)}>{label}</Link>
           ))}
           <Link className="nav-staff-link" href="/admin/login" onClick={() => setOpen(false)}>Admin login</Link>
           <Link className="nav-cta" href="/enquire" onClick={() => setOpen(false)}>Request fact sheet <span aria-hidden="true">↗</span></Link>
@@ -243,7 +244,7 @@ export function SiteFooter() {
       </div>
       <div className="wrap footer-bottom">
         <p>For information only. This website does not constitute an offer or investment advice. The 17% property-development IRR and 10% p.a. USD net income yield on NAV are targets, not guarantees. Unit transfers are subject to the pre-listing lock-in and applicable laws. Please consult the official offer documents and seek independent advice. The enquiry form does not accept payments, subscribe for units or reserve an allocation. Enquiry details are stored securely so the REIT team can respond to your request.</p>
-        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><Link href="/enquire">Request fact sheet ↓</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/cookies">Cookies</Link><Link href="/admin/login">Admin login</Link><a className="developer-credit" href="https://spiritusglobal.tech/" target="_blank" rel="noopener noreferrer" aria-label="Website developed by Spiritus, opens in a new tab">Website by <strong>SPIRITUS</strong><span aria-hidden="true">↗</span></a></div>
+        <div className="footer-meta"><span>© 2026 Mutirikwi REIT</span><span>SECZ Registration SECZ101159S</span><Link href="/articles">Property &amp; REIT guides</Link><Link href="/enquire">Request fact sheet ↓</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/cookies">Cookies</Link><Link href="/admin/login">Admin login</Link><a className="developer-credit" href="https://spiritusglobal.tech/" target="_blank" rel="noopener noreferrer" aria-label="Website developed by Spiritus, opens in a new tab">Website by <strong>SPIRITUS</strong><span aria-hidden="true">↗</span></a></div>
       </div>
     </footer>
   );

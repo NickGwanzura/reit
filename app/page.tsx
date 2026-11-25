@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { InvestmentCalculator, SiteFooter, SiteHeader } from "./components";
+import { articles } from "./articles/content";
 
 const risks = [
   ["Currency Risk", "The fund's performance and investor outcomes may be affected by currency movements. Units are denominated and traded in United States Dollars."],
@@ -101,6 +102,8 @@ export default function HomePage() {
             <a className="partner-card" href="https://krestonzim.com/service/trustee-services/" target="_blank" rel="noreferrer" aria-label="Kreston Zimbabwe Trustee Services, opens in a new tab"><small>TRUSTEE</small><strong>Kreston Zimbabwe Trustees <span aria-hidden="true">↗</span></strong></a>
           </div></div>
         </section>
+
+        <section className="editorial-home" aria-labelledby="guides-heading"><div className="wrap"><p className="eyebrow"><span /> MUTIRIKWI REIT · INSIGHTS</p><div className="editorial-home-head"><h2 id="guides-heading">Property &amp; REIT <em>guides.</em></h2><Link className="text-link" href="/articles">View all guides <span>→</span></Link></div><div className="editorial-home-grid">{articles.map((article) => <article key={article.slug}><p>{article.readTime}</p><h3><Link href={`/articles/${article.slug}`}>{article.title}</Link></h3><Link className="text-link" href={`/articles/${article.slug}`}>Read guide <span>↗</span></Link></article>)}</div></div></section>
 
         <section className="section faq-section" id="faqs"><div className="wrap faq-layout"><div><p className="eyebrow"><span /> GOOD QUESTIONS</p><h2>Before you<br /><em>take the next step.</em></h2><p>Get familiar with the fund, its strategy, the published terms and the KYC process.</p><Link className="text-link" href="/enquire">Ask the fund team <span>→</span></Link></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span /></summary><p>{answer}</p></details>)}</div></div></section>
 
